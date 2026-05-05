@@ -2,15 +2,22 @@
 """Document Q&A CLI — loads a file once (prompt-cached), then answers questions about it."""
 
 import sys
+import json
+import time
+import random
 import anthropic
+from pydantic import BaseModel, Field
 from dotenv import load_dotenv
 
 load_dotenv()
 
-MODEL = "claude-sonnet-4-5"
+MODEL = "claude-sonnet-4-6"
 MAX_TOKENS = 4096
 SOFT_SIZE_LIMIT = 200_000  # characters
 
+class StructJSON(BaseModel):
+    Q: str = Field(min_length=1)
+    A: str = Field(min_length=1)
 
 def load_document(path: str) -> str:
     try:
@@ -39,8 +46,9 @@ def build_system(content: str) -> list[dict]:
             "type": "text",
             "text": (
                 "You are a helpful assistant. Answer questions accurately and "
-                "concisely based on the document below. If the answer is not "
-                "in the document, say so.\n\n"
+                "concisely based on the document below."
+                "If the answer is not explicitly in the document, say: 'I could not find this in the document.' Do not guess."
+                "Always respond using the provided tool with JSON format {\"Q\": ..., \"A\": ...}.\n\n"
                 f"<document>\n{content}\n</document>"
             ),
             "cache_control": {"type": "ephemeral"},
@@ -52,6 +60,7 @@ def print_cache_stats(usage) -> None:
     created = getattr(usage, "cache_creation_input_tokens", 0) or 0
     read = getattr(usage, "cache_read_input_tokens", 0) or 0
     uncached = getattr(usage, "input_tokens", 0) or 0
+    output = getattr(usage, "output_tokens", 0) or 0
 
     if created:
         print(f"  [cache write: {created:,} tokens]", file=sys.stderr)
@@ -59,7 +68,31 @@ def print_cache_stats(usage) -> None:
         print(f"  [cache hit: {read:,} tokens saved]", file=sys.stderr)
     if not created and not read:
         print(f"  [uncached input: {uncached:,} tokens]", file=sys.stderr)
+    if output:
+        print(f"  [output: {output:,} tokens]", file=sys.stderr)
 
+def call_with_backoff(client, **kwargs):
+    max_retries = 5
+    base_delay = 0.5
+
+    for attempt in range(max_retries):
+        try:
+            response = client.messages.create(**kwargs)
+            text_output = "".join(
+                block.text for block in response.content if block.type == "text"
+            ).strip()
+
+            parsed = StructJSON.model_validate_json(text_output)
+
+            return response, parsed
+
+        except Exception as e:
+            if attempt == max_retries - 1:
+                raise e
+
+            delay = random.uniform(0, base_delay * (2 ** attempt))
+            print(f"  [retry {attempt+1}] waiting {delay:.2f}s...", file=sys.stderr)
+            time.sleep(delay)
 
 def main() -> None:
     if len(sys.argv) != 2:
@@ -87,23 +120,41 @@ def main() -> None:
 
         messages.append({"role": "user", "content": question})
 
-        answer_parts: list[str] = []
         usage = None
 
         try:
-            with client.messages.stream(
-                model=MODEL,
-                max_tokens=MAX_TOKENS,
-                system=system,
-                messages=messages,
-            ) as stream:
-                print("  A: ", end="", flush=True)
-                for chunk in stream.text_stream:
-                    print(chunk, end="", flush=True)
-                    answer_parts.append(chunk)
+            try:
+                response, parsed = call_with_backoff(
+                    client,
+                    model=MODEL,
+                    max_tokens=MAX_TOKENS,
+                    temperature=0,
+                    system=system,
+                    messages=messages,
+                    output_config={
+                        "format": {
+                            "type": "json_schema",
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "Q": {"type": "string", "minLength": 1},
+                                    "A": {"type": "string", "minLength": 1},
+                                },
+                                "required": ["Q", "A"],
+                                "additionalProperties": False,
+                            },
+                        }
+                    },
+                )
 
-                final = stream.get_final_message()
-                usage = final.usage
+                usage = response.usage
+
+                print(f"  A: {parsed}")   # guaranteed valid JSON
+
+            except (json.JSONDecodeError, ValueError, anthropic.APIError) as e:
+                print(f"\nFailed after retries: {e}", file=sys.stderr)
+                messages.pop()
+                continue
 
         except anthropic.APIError as e:
             print(f"\nAPI error: {e}", file=sys.stderr)
@@ -115,8 +166,10 @@ def main() -> None:
             print_cache_stats(usage)
         print()
 
-        answer = "".join(answer_parts)
-        messages.append({"role": "assistant", "content": answer})
+        messages.append({
+            "role": "assistant",
+            "content": parsed.model_dump_json()
+        })
 
 
 if __name__ == "__main__":
