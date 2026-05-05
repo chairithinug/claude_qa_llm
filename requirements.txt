@@ -1,1 +1,7 @@
 anthropic>=0.40.0
+python-dotenv
+pydantic
+ollama
+numpy
+faiss-cpu
+rank_bm25
