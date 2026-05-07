@@ -155,7 +155,8 @@ def main() -> None:
             )
 
             usage = response.usage
-            print(f"  A: {parsed.A}")
+            # print(f"  A: {parsed.A}")
+            print(f"{parsed}")
 
         except (ValueError, anthropic.APIError) as e:
             print(f"\nFailed after retries: {e}", file=sys.stderr)

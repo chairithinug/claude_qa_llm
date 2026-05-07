@@ -5,3 +5,5 @@ ollama
 numpy
 faiss-cpu
 rank_bm25
+tqdm
+sentence-transformers
