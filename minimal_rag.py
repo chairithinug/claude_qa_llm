@@ -10,7 +10,7 @@ from tqdm import tqdm
 
 DB_PATH = "rag.db"
 EMBED_MODEL = "nomic-embed-text"
-GEN_MODEL = "qwen3:0.6b"
+GEN_MODEL = "qwen3.5:0.8b"
 
 
 def parse_args():

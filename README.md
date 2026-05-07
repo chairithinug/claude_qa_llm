@@ -151,7 +151,7 @@ Markdown files → chunk_text() → embed() → SQLite + IndexFlatL2 + BM25
 
 ```bash
 ollama pull nomic-embed-text
-ollama pull qwen3:0.6b
+ollama pull qwen3.5:0.8b
 ```
 
 ### Usage
@@ -206,7 +206,7 @@ Generated with [graphify](https://github.com/safishamsi/graphify). 93 nodes · 1
 | `anthropic` | Claude API — structured output, prompt caching, retry (`structured_QA_RAG.py`, `structured_qa.py`) |
 | `python-dotenv` | Loads `ANTHROPIC_API_KEY` from `.env` |
 | `pydantic` | Validates structured JSON responses |
-| `ollama` | Local embeddings (`nomic-embed-text`) and generation (`qwen3:0.6b` in `minimal_rag.py`) |
+| `ollama` | Local embeddings (`nomic-embed-text`) and generation (`qwen3.5:0.8b` in `minimal_rag.py`) |
 | `faiss-cpu` | Exact vector similarity search (`IndexFlatL2`) |
 | `rank_bm25` | BM25 keyword scoring for hybrid retrieval |
 | `sentence-transformers` | Cross-encoder reranking (`ms-marco-MiniLM-L-6-v2`) in `structured_QA_RAG.py` |
@@ -227,5 +227,5 @@ echo "ANTHROPIC_API_KEY=your_key" > .env
 ollama pull nomic-embed-text
 
 # For minimal_rag.py (generation model)
-ollama pull qwen3:0.6b
+ollama pull qwen3.5:0.8b
 ```
