@@ -67,41 +67,54 @@ ollama pull nomic-embed-text
 
 ### Usage
 
-**Interactive mode** — ask multiple questions in a loop:
 ```bash
+# Interactive mode
 python structured_QA_RAG.py /path/to/docs
-```
 
-**Single question** — answer once and exit:
-```bash
+# Single question
 python structured_QA_RAG.py /path/to/docs -q "What is the installation process?"
-```
 
-**Current directory** (default):
-```bash
-python structured_QA_RAG.py
+# Tune retrieval hyperparameters
+python structured_QA_RAG.py /path/to/docs -k 30 --top-n 15 --alpha 0.5
+
+# Full help
+python structured_QA_RAG.py --help
 ```
 
 On first run the cross-encoder model (~85MB) is downloaded once and cached by `sentence-transformers`.
 
-If you change chunk parameters or re-ingest different documents, delete `rag.db` first:
+Delete `rag.db` before re-ingesting with different documents or chunk settings:
 ```bash
 rm rag.db && python structured_QA_RAG.py /path/to/docs
 ```
 
-### Key parameters
+### Flags
+
+| Flag | Default | Effect |
+|---|---|---|
+| `directory` | `.` | Root directory to load markdown files from |
+| `-q`, `--question` | — | Ask a single question and exit; omit for interactive mode |
+| `-k` | `20` | Candidates fetched by hybrid retrieval before reranking |
+| `--top-n` | `10` | Chunks passed to Claude after reranking |
+| `--alpha` | `0.7` | Semantic (vector) vs lexical (BM25) weight, `0.0`–`1.0` |
+
+**Tuning tips:**
+- Increase `-k` if relevant chunks are being missed; decrease to speed up reranking
+- Lower `--alpha` (e.g. `0.5`) for docs with specific terminology, version numbers, or code identifiers where keyword matching matters more
+- Increase `--top-n` for broad questions that span multiple sections
+
+### Chunk parameters
+
+These are set in code rather than flags as they require re-ingestion to take effect:
 
 | Parameter | Default | Location | Effect |
 |---|---|---|---|
-| `max_words` | 150 | `chunk_text()` | Max words per chunk |
-| `min_words` | 30 | `chunk_text()` | Min before merging paragraphs |
-| `k` (hybrid) | 20 | `answer()` | Candidates fetched before rerank |
-| `top_n` (rerank) | 10 | `answer()` | Chunks passed to Claude |
-| `alpha` | 0.7 | `hybrid_retrieve()` | Semantic vs lexical weight |
+| `max_words` | `150` | `chunk_text()` | Max words per chunk |
+| `min_words` | `30` | `chunk_text()` | Min before merging adjacent paragraphs |
 
 ### Output
 
-Each answer is printed as plain text. Cache stats (write/hit/tokens) are printed to stderr per turn. Retrieved chunks and their reranked order are also printed to stderr before the answer so you can inspect what context Claude saw.
+Answers are printed to stdout. Cache stats and the reranked context list are printed to stderr each turn so you can inspect what Claude saw without polluting piped output.
 
 ---
 

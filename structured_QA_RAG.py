@@ -63,7 +63,12 @@ def load_docs_from_directory(root_dir):
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description="RAG system with Claude API that loads markdown documents from a directory"
+        description=(
+            "RAG system using Claude API over a directory of markdown files.\n"
+            "Chunks documents, embeds with nomic-embed-text, retrieves with hybrid\n"
+            "vector+BM25 search, reranks with a cross-encoder, and answers with Claude Sonnet."
+        ),
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument(
         "directory",
@@ -73,9 +78,27 @@ def parse_args():
     )
     parser.add_argument(
         "-q", "--question",
-        type=str,
         default=None,
-        help="Question to ask the RAG system. If not provided, enters interactive mode"
+        help="Ask a single question and exit. Omit to enter interactive mode."
+    )
+    parser.add_argument(
+        "-k",
+        type=int,
+        default=20,
+        help="Number of candidates fetched by hybrid retrieval before reranking (default: 20)"
+    )
+    parser.add_argument(
+        "--top-n",
+        type=int,
+        default=10,
+        dest="top_n",
+        help="Number of chunks passed to Claude after reranking (default: 10)"
+    )
+    parser.add_argument(
+        "--alpha",
+        type=float,
+        default=0.7,
+        help="Weight for semantic (vector) vs lexical (BM25) scores, 0.0–1.0 (default: 0.7)"
     )
     return parser.parse_args()
 
@@ -309,14 +332,14 @@ def rerank(reranker, query, chunks, top_n=10):
     return [chunk for chunk, _ in ranked[:top_n]]
 
 
-def answer(client, reranker, index, ids, texts, bm25, query, history: list):
+def answer(client, reranker, index, ids, texts, bm25, query, history: list, k=20, top_n=10, alpha=0.7):
     """Retrieve context via hybrid search and answer using Claude with structured output.
 
     history is a list of prior {"role": ..., "content": ...} turns, mutated in place.
     """
     # Hybrid retrieval casts a wide net; cross-encoder reranking picks the most relevant from it
-    candidates = hybrid_retrieve(index, ids, texts, bm25, query, k=20)
-    context_docs = rerank(reranker, query, candidates, top_n=10)
+    candidates = hybrid_retrieve(index, ids, texts, bm25, query, k=k, alpha=alpha)
+    context_docs = rerank(reranker, query, candidates, top_n=top_n)
 
     print("\n--- Retrieved context (reranked order) ---", file=sys.stderr)
     for i, chunk in enumerate(context_docs, 1):
@@ -390,12 +413,14 @@ def main():
     reranker = CrossEncoder(RERANK_MODEL)
     history: list = []
 
+    kwargs = dict(k=args.k, top_n=args.top_n, alpha=args.alpha)
+
     if args.question:
-        answer_text = answer(client, reranker, index, ids, texts, bm25, args.question, history)
+        answer_text = answer(client, reranker, index, ids, texts, bm25, args.question, history, **kwargs)
         if answer_text:
             print(f"\nAnswer: {answer_text}")
     else:
-        print("\n=== RAG Interactive Mode ===")
+        print(f"\n=== RAG Interactive Mode (k={args.k}, top_n={args.top_n}, alpha={args.alpha}) ===")
         print("Type 'exit' or 'quit' to exit\n")
         while True:
             try:
@@ -411,7 +436,7 @@ def main():
                 print("Goodbye!")
                 break
 
-            answer_text = answer(client, reranker, index, ids, texts, bm25, question, history)
+            answer_text = answer(client, reranker, index, ids, texts, bm25, question, history, **kwargs)
             if answer_text:
                 print(f"\n> A: {answer_text}\n")
 
