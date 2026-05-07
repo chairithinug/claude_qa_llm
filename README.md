@@ -10,7 +10,7 @@ A CLI toolkit for document Q&A using Claude. Ranges from a simple single-documen
 |---|---|
 | `structured_QA_RAG.py` | Full RAG pipeline — load a directory of markdown docs, chunk, embed, retrieve, rerank, answer with Claude |
 | `structured_qa.py` | Single-document Q&A with prompt caching and structured JSON output |
-| `minimal_rag.py` | Minimal RAG prototype with FAISS + BM25 hybrid search and local LLM via ollama |
+| `minimal_rag.py` | Fully local RAG with FAISS + BM25 hybrid search and local LLM via ollama — no API key needed |
 | `qa.py` | Simple streaming Q&A for a single document |
 | `embedding.py` | Standalone embedding example using ollama |
 
@@ -41,13 +41,13 @@ Markdown files
      ▼
 ── per query ──────────────────────────────────────────────────────────
      ▼
- hybrid_retrieve()     Fetches k*3=60 candidates from FAISS, scores them
-     │                 with BM25, normalizes both, combines (α=0.7 semantic
-     │                 + 0.3 lexical), returns top 20.
+ hybrid_retrieve()     Fetches k×3 candidates from FAISS (default k=20, so 60
+     │                 candidates), scores them with BM25, normalizes both,
+     │                 combines (α semantic + 1-α lexical), returns top k.
      ▼
  rerank()              Cross-encoder (ms-marco-MiniLM-L-6-v2) scores each
      │                 (query, chunk) pair jointly — more accurate than
-     │                 independent embeddings. Returns top 10.
+     │                 independent embeddings. Returns top_n (default 10).
      ▼
  answer()              Assembles context into the user message (system prompt
                        is a static cached constant). Calls Claude Sonnet with
@@ -120,7 +120,7 @@ Answers are printed to stdout. Cache stats and the reranked context list are pri
 
 ## structured_qa.py
 
-Single-document Q&A. Loads one file, caches it in the Claude system prompt for 5 minutes, then answers questions from that cache — no re-tokenizing the document on each turn.
+Single-document Q&A using `claude-sonnet-4-6`. Loads one file, caches it in the Claude system prompt for 5 minutes, then answers questions from that cache — no re-tokenizing the document on each turn.
 
 ```bash
 python structured_qa.py path/to/document.md
@@ -181,13 +181,13 @@ Delete `rag.db` before re-ingesting with different documents or chunk settings.
 
 | Package | Role |
 |---|---|
-| `anthropic` | Claude API — structured output, prompt caching, retry |
+| `anthropic` | Claude API — structured output, prompt caching, retry (`structured_QA_RAG.py`, `structured_qa.py`) |
 | `python-dotenv` | Loads `ANTHROPIC_API_KEY` from `.env` |
 | `pydantic` | Validates structured JSON responses |
-| `ollama` | Local embeddings (`nomic-embed-text`) |
-| `faiss-cpu` | Exact vector similarity search (IndexFlatL2) |
+| `ollama` | Local embeddings (`nomic-embed-text`) and generation (`qwen3:0.6b` in `minimal_rag.py`) |
+| `faiss-cpu` | Exact vector similarity search (`IndexFlatL2`) |
 | `rank_bm25` | BM25 keyword scoring for hybrid retrieval |
-| `sentence-transformers` | Cross-encoder reranking (`ms-marco-MiniLM-L-6-v2`) |
+| `sentence-transformers` | Cross-encoder reranking (`ms-marco-MiniLM-L-6-v2`) in `structured_QA_RAG.py` |
 | `numpy` | Vector operations |
 | `tqdm` | Progress bars during ingestion |
 
@@ -197,6 +197,13 @@ Delete `rag.db` before re-ingesting with different documents or chunk settings.
 
 ```bash
 pip install -r requirements.txt
+
+# For structured_QA_RAG.py and structured_qa.py
 echo "ANTHROPIC_API_KEY=your_key" > .env
+
+# For all RAG tools (embedding model)
 ollama pull nomic-embed-text
+
+# For minimal_rag.py (generation model)
+ollama pull qwen3:0.6b
 ```
