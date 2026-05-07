@@ -134,7 +134,7 @@ python structured_qa.py path/to/document.md --ollama
 |---|---|---|
 | API key | Required | Not required |
 | Prompt caching | 5-min cache on system prompt | None |
-| JSON enforcement | `output_config` schema | Prompt instruction only |
+| JSON enforcement | `output_config` schema | `format="json"` + regex fallback |
 | `<think>` blocks | Not emitted | Stripped before parsing |
 
 Responses are structured JSON `{"Q": "...", "A": "..."}`. Conversation history is maintained across turns so follow-up questions work correctly.

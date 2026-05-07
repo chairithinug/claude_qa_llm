@@ -85,14 +85,22 @@ def print_cache_stats(usage) -> None:
         print(f"  [output: {output:,} tokens]", file=sys.stderr)
 
 def call_ollama(system: str, messages: list) -> StructJSON:
-    import ollama
-    # Prepend system prompt as a system message — ollama supports the OpenAI-style role
-    full_messages = [{"role": "system", "content": system}] + messages
-    res = ollama.chat(model=OLLAMA_MODEL, messages=full_messages)
-    text = res["message"]["content"].strip()
-    # Strip <think>...</think> blocks emitted by reasoning models before JSON parsing
     import re
+    import ollama
+    full_messages = [{"role": "system", "content": system}] + messages
+    # format="json" instructs ollama to constrain output to valid JSON
+    res = ollama.chat(model=OLLAMA_MODEL, messages=full_messages, format="json")
+    text = res["message"]["content"].strip()
+    # Strip <think>...</think> reasoning blocks before parsing
     text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL).strip()
+    # Strip markdown code fences
+    text = re.sub(r"^```(?:json)?\s*", "", text)
+    text = re.sub(r"\s*```$", "", text).strip()
+    # Fallback: extract first {...} block if model wrapped JSON in prose
+    if not text.startswith("{"):
+        match = re.search(r"\{.*\}", text, re.DOTALL)
+        if match:
+            text = match.group()
     return StructJSON.model_validate_json(text)
 
 
