@@ -9,7 +9,7 @@ A CLI toolkit for document Q&A using Claude. Ranges from a simple single-documen
 | File | What it does |
 |---|---|
 | `structured_QA_RAG.py` | Full RAG pipeline — load a directory of markdown docs, chunk, embed, retrieve, rerank, answer with Claude |
-| `structured_qa.py` | Single-document Q&A with prompt caching and structured JSON output |
+| `structured_qa.py` | Single-document Q&A — Claude (prompt-cached) or ollama (`qwen3.5:0.8b`) backend |
 | `minimal_rag.py` | Fully local RAG with FAISS + BM25 hybrid search and local LLM via ollama — no API key needed |
 | `qa.py` | Simple streaming Q&A for a single document |
 | `embedding.py` | Standalone embedding example using ollama |
@@ -120,11 +120,22 @@ Answers are printed to stdout. Cache stats and the reranked context list are pri
 
 ## structured_qa.py
 
-Single-document Q&A using `claude-sonnet-4-6`. Loads one file, caches it in the Claude system prompt for 5 minutes, then answers questions from that cache — no re-tokenizing the document on each turn.
+Single-document Q&A with two backends. Loads one file, then answers questions in a loop.
 
 ```bash
+# Claude (default) — prompt-cached, structured JSON output via output_config
 python structured_qa.py path/to/document.md
+
+# ollama — local inference, no API key required
+python structured_qa.py path/to/document.md --ollama
 ```
+
+| | Claude (`claude-sonnet-4-6`) | ollama (`qwen3.5:0.8b`) |
+|---|---|---|
+| API key | Required | Not required |
+| Prompt caching | 5-min cache on system prompt | None |
+| JSON enforcement | `output_config` schema | Prompt instruction only |
+| `<think>` blocks | Not emitted | Stripped before parsing |
 
 Responses are structured JSON `{"Q": "...", "A": "..."}`. Conversation history is maintained across turns so follow-up questions work correctly.
 
@@ -206,7 +217,7 @@ Generated with [graphify](https://github.com/safishamsi/graphify). 93 nodes · 1
 | `anthropic` | Claude API — structured output, prompt caching, retry (`structured_QA_RAG.py`, `structured_qa.py`) |
 | `python-dotenv` | Loads `ANTHROPIC_API_KEY` from `.env` |
 | `pydantic` | Validates structured JSON responses |
-| `ollama` | Local embeddings (`nomic-embed-text`) and generation (`qwen3.5:0.8b` in `minimal_rag.py`) |
+| `ollama` | Local embeddings (`nomic-embed-text`) and generation (`qwen3.5:0.8b` in `minimal_rag.py`, `structured_qa.py --ollama`) |
 | `faiss-cpu` | Exact vector similarity search (`IndexFlatL2`) |
 | `rank_bm25` | BM25 keyword scoring for hybrid retrieval |
 | `sentence-transformers` | Cross-encoder reranking (`ms-marco-MiniLM-L-6-v2`) in `structured_QA_RAG.py` |
@@ -226,6 +237,6 @@ echo "ANTHROPIC_API_KEY=your_key" > .env
 # For all RAG tools (embedding model)
 ollama pull nomic-embed-text
 
-# For minimal_rag.py (generation model)
+# For minimal_rag.py and structured_qa.py --ollama (generation model)
 ollama pull qwen3.5:0.8b
 ```
