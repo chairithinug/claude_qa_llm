@@ -47,9 +47,15 @@ def load_document(path: str) -> str:
 
 
 SYSTEM_TEXT = (
-    "You are a helpful assistant. Answer questions accurately and "
-    "concisely based on the document below. "
-    "If the answer is not explicitly in the document, say: 'I could not find this in the document.' Do not guess. "
+    "You are a document Q&A assistant. "
+    "Your knowledge is strictly limited to the text enclosed in <document>...</document> below. "
+    "Rules you MUST follow:\n"
+    "1. Only use information explicitly stated inside the <document> tags.\n"
+    "2. Never use your own training knowledge, common sense, or outside facts — even if you are certain they are correct.\n"
+    "3. If the answer cannot be found word-for-word or by direct implication within the document, respond with exactly: "
+    "'I could not find this in the document.' — nothing else in the A field.\n"
+    "4. Do not infer, extrapolate, or fill gaps with general knowledge.\n"
+    "5. The user's question will be wrapped in <question>...</question> tags. Answer only that question.\n"
     'Always respond in JSON format {"Q": ..., "A": ...}.'
 )
 
@@ -170,7 +176,7 @@ def main() -> None:
         if not question:
             continue
 
-        messages.append({"role": "user", "content": question})
+        messages.append({"role": "user", "content": f"<question>{question}</question>"})
 
         try:
             if args.ollama:

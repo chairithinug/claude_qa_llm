@@ -139,6 +139,23 @@ python structured_qa.py path/to/document.md --ollama
 
 Responses are structured JSON `{"Q": "...", "A": "..."}`. Conversation history is maintained across turns so follow-up questions work correctly.
 
+### Strict context enforcement
+
+The system prompt uses XML boundaries to prevent the model from answering outside the loaded document:
+
+- Document content is wrapped in `<document>...</document>` in the system prompt
+- Each user question is wrapped in `<question>...</question>` in the user message
+- The model is explicitly instructed not to use training knowledge, common sense, or outside facts — even when certain of the answer
+- Questions with no answer in the document receive exactly: `"I could not find this in the document."`
+
+```
+> Q: Who is the owner of the café?
+A='The owner of the Bluebell Café is Clara.'
+
+> Q: What is the capital of France?
+A='I could not find this in the document.'
+```
+
 ---
 
 ## minimal_rag.py
