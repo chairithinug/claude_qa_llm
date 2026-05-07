@@ -1,130 +1,66 @@
 import sqlite3
 import json
+import argparse
 import numpy as np
 import faiss
 import ollama
-import random
-import argparse
 from pathlib import Path
 from rank_bm25 import BM25Okapi
 from tqdm import tqdm
 
-
-def load_docs_from_directory(root_dir):
-    """Load all markdown files from a root directory recursively.
-    Returns list of tuples: (content, filename)
-    """
-    docs = []
-    root_path = Path(root_dir)
-
-    if not root_path.exists():
-        raise ValueError(f"Directory does not exist: {root_dir}")
-
-    md_files = sorted(root_path.rglob("*.md"))
-
-    for md_file in md_files:
-        try:
-            with open(md_file, "r", encoding="utf-8") as f:
-                content = f.read()
-                if content.strip():
-                    docs.append((content, str(md_file)))
-        except Exception as e:
-            print(f"Warning: Could not read {md_file}: {e}")
-
-    if not docs:
-        raise ValueError(f"No markdown files found in {root_dir}")
-
-    return docs
+DB_PATH = "rag.db"
+EMBED_MODEL = "nomic-embed-text"
+GEN_MODEL = "qwen3:0.6b"
 
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description="RAG system that loads markdown documents from a directory"
+        description="Minimal RAG over a directory of markdown files"
     )
     parser.add_argument(
-        "directory",
-        nargs="?",
-        default=".",
+        "directory", nargs="?", default=".",
         help="Root directory to load markdown files from (default: current directory)"
     )
     parser.add_argument(
-        "-q", "--question",
-        type=str,
-        default=None,
-        help="Question to ask the RAG system. If not provided, enters interactive mode"
+        "-q", "--question", default=None,
+        help="Ask a single question and exit. Omit to enter interactive mode."
     )
     return parser.parse_args()
 
 
-args = parse_args()
-docs = load_docs_from_directory(args.directory)
+def load_docs(root_dir):
+    root = Path(root_dir)
+    if not root.exists():
+        raise ValueError(f"Directory does not exist: {root_dir}")
+    docs = []
+    for path in sorted(root.rglob("*.md")):
+        try:
+            text = path.read_text(encoding="utf-8").strip()
+            if text:
+                docs.append((text, str(path)))
+        except Exception as e:
+            print(f"Warning: could not read {path}: {e}")
+    if not docs:
+        raise ValueError(f"No markdown files found in {root_dir}")
+    return docs
 
-doc_contents = [content for content, _ in docs]
-tokenized_docs = [doc.split() for doc in doc_contents]
-bm25 = BM25Okapi(tokenized_docs)
 
-def bm25_search(query, k=3):
-    tokenized_query = query.split()
-    scores = bm25.get_scores(tokenized_query)
-    top_k = np.argsort(scores)[-k:][::-1]
-    return [doc_contents[i] for i in top_k]
+def chunk_text(text, filename, size=150, overlap=30):
+    words = text.split()
+    # Step by (size - overlap) so adjacent chunks share context across boundaries
+    return [
+        (" ".join(words[i:i + size]), filename)
+        for i in range(0, len(words), size - overlap)
+    ]
 
-
-DB_PATH = "rag.db"
-EMBED_MODEL = "nomic-embed-text"
-GEN_MODEL = "qwen3.5:0.8b"
 
 def embed(text):
-    return ollama.embeddings(
-        model=EMBED_MODEL,
-        prompt=text
-    )["embedding"]
-
-# def cosine(a, b):
-#     return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
-
-# docs = [
-#     "RAG stands for Retrieval Augmented Generation.",
-#     "It combines vector search with language models.",
-#     "Cats are animals."
-# ]
-
-# vectors = [embed(d) for d in docs]
-
-# def retrieve(query, k=2):
-#     q_vec = embed(query)
-#     scores = [cosine(q_vec, v) for v in vectors]
-#     top_k = np.argsort(scores)[-k:][::-1]
-#     return [docs[i] for i in top_k]
-
-# def answer(query):
-#     context = "\n".join(retrieve(query))
-#     res = ollama.chat(
-#         model=GEN_MODEL,
-#         messages=[
-#             {
-#                 "role": "user",
-#                 "content": f"""
-#                     Answer using ONLY this context:
-#                     {context}
-#                     Question: {query}
-#                     """
-#             }
-#         ]
-#     )
-#     return res["message"]["content"]
-
-# print(answer("What is RAG?"))
-
-
-
+    return ollama.embeddings(model=EMBED_MODEL, prompt=text)["embedding"]
 
 
 def init_db():
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    # c.execute("DELETE FROM documents")
-    # conn.commit()
     c.execute("""
         CREATE TABLE IF NOT EXISTS documents (
             id INTEGER PRIMARY KEY,
@@ -133,146 +69,114 @@ def init_db():
             filename TEXT
         )
     """)
-
-    # Add filename column if it doesn't exist
+    # Migrate existing DBs that predate the filename column
     try:
         c.execute("ALTER TABLE documents ADD COLUMN filename TEXT")
     except sqlite3.OperationalError:
         pass
-
     conn.commit()
     return conn
 
-def chunk_text(text, filename, size=300, overlap=50):
-    """Chunk text and attach filename metadata.
-    Returns list of tuples: (chunk_text, filename)
-    """
-    words = text.split()
-    chunks = []
-    for i in range(0, len(words), size - overlap):
-        chunk = words[i:i + size]
-        chunks.append((" ".join(chunk), filename))
-    return chunks
 
-def add_docs(conn, docs):
+def add_docs(conn, chunks):
     c = conn.cursor()
-    for doc, filename in tqdm(docs, desc="Adding documents"):
-        vec = embed(doc)
+    for text, filename in tqdm(chunks, desc="Embedding"):
+        vec = embed(text)
+        # INSERT OR IGNORE makes re-runs safe without clearing the DB
         c.execute(
             "INSERT OR IGNORE INTO documents (text, embedding, filename) VALUES (?, ?, ?)",
-            (doc, json.dumps(vec), filename)
+            (text, json.dumps(vec), filename)
         )
+    # Single commit after the loop — per-row commits are much slower
     conn.commit()
 
-def build_index(conn, nlist=100):
+
+def build_index(conn):
     c = conn.cursor()
-    c.execute("SELECT id, embedding FROM documents")
+    c.execute("SELECT id, text, embedding FROM documents")
     rows = c.fetchall()
-    vectors = []
-    ids = []
-    for row in rows:
-        ids.append(row[0])
-        vectors.append(json.loads(row[1]))
+    if not rows:
+        raise ValueError("No documents in database.")
+
+    ids, texts, vectors = [], [], []
+    for doc_id, text, emb in rows:
+        ids.append(doc_id)
+        texts.append(text)
+        vectors.append(json.loads(emb))
+
+    # FAISS requires float32; numpy defaults to float64
     vectors = np.array(vectors).astype("float32")
-    print(vectors.shape)
-    dim = vectors.shape[1]
-
-    quantizer = faiss.IndexFlatL2(dim)
-    index = faiss.IndexIVFFlat(quantizer, dim, nlist)
-
-    index.train(vectors)
+    print(f"Index: {len(vectors)} chunks")
+    index = faiss.IndexFlatL2(vectors.shape[1])
     index.add(vectors)
-    return index, ids
+
+    # BM25 built over the same corpus so indices stay aligned with FAISS
+    bm25 = BM25Okapi([t.split() for t in texts])
+    return index, ids, texts, bm25
 
 
-def retrieve(conn, index, ids, query, k=5):
+def _normalize(scores):
+    lo, hi = min(scores), max(scores)
+    return [(s - lo) / (hi - lo + 1e-8) for s in scores]
+
+
+def retrieve(index, ids, texts, bm25, query, k=10, alpha=0.7):
+    # Over-fetch so BM25 can promote keyword matches that vector search ranked lower
+    n = min(k * 3, len(ids))
     q_vec = np.array([embed(query)]).astype("float32")
-    index.nprobe = 10  # how many clusters to check
-    D, I = index.search(q_vec, k)
-    c = conn.cursor()
-    results = []
-    print(D, I)
-    for idx in I[0]:
-        doc_id = ids[idx]
-        c.execute("SELECT text FROM documents WHERE id=?", (doc_id,))
-        results.append(c.fetchone()[0])
-    return results
+    D, I = index.search(q_vec, n)
 
-def normalize(scores):
-    min_s = min(scores)
-    max_s = max(scores)
-    return [(s - min_s) / (max_s - min_s + 1e-8) for s in scores]
+    # Convert L2 distance to similarity: smaller distance → higher score
+    vec_scores = _normalize([1 / (1 + d) for d in D[0]])
+    bm25_all = bm25.get_scores(query.split())
+    bm25_scores = _normalize([bm25_all[i] for i in I[0]])
 
-def hybrid_search(query, k=5, alpha=0.7):
-    # --- vector search ---
-    q_vec = np.array([embed(query)]).astype("float32")
-    D, I = index.search(q_vec, k)
-
-    vec_scores = [1 / (1 + d) for d in D[0]]
-    vec_docs = [doc_contents[i] for i in I[0]]
-
-    # --- bm25 search ---
-    tokenized_query = query.split()
-    bm25_scores = bm25.get_scores(tokenized_query)
-
-    # pick same docs for alignment
-    bm25_subset = [bm25_scores[i] for i in I[0]]
-
-    # --- normalize ---
-    vec_norm = normalize(vec_scores)
-    bm25_norm = normalize(bm25_subset)
-
-    # --- combine ---
-    final_scores = [
-        alpha * v + (1 - alpha) * b
-        for v, b in zip(vec_norm, bm25_norm)
-    ]
-
-    # sort
-    ranked = sorted(
-        zip(vec_docs, final_scores),
-        key=lambda x: x[1],
-        reverse=True
-    )
-
-    return [doc for doc, _ in ranked[:k]]
+    # alpha weights semantic (vector) vs lexical (BM25)
+    combined = [alpha * v + (1 - alpha) * b for v, b in zip(vec_scores, bm25_scores)]
+    ranked = sorted(zip([texts[i] for i in I[0]], combined), key=lambda x: x[1], reverse=True)
+    return [text for text, _ in ranked[:k]]
 
 
-def answer(conn, index, ids, query):
-    context = "\n".join(retrieve(conn, index, ids, query))
-    print(context)
+def answer(index, ids, texts, bm25, query):
+    context = "\n---\n".join(retrieve(index, ids, texts, bm25, query))
     res = ollama.chat(
         model=GEN_MODEL,
-        messages=[{
-            "role": "user",
-            "content": f"""
-                Answer ONLY using this context:
-                {context}
-                Question: {query}
-            """
-        }]
+        messages=[{"role": "user", "content": f"Answer ONLY using this context:\n{context}\n\nQuestion: {query}"}]
     )
     return res["message"]["content"]
 
-if __name__ == "__main__":
+
+def main():
+    args = parse_args()
+    docs = load_docs(args.directory)
+
     conn = init_db()
-    all_chunks = []
-    for content, filename in tqdm(docs, desc="Processing documents"):
-        chunks = chunk_text(content, filename)
-        all_chunks.extend(chunks)
-    add_docs(conn, all_chunks)
-    index, ids = build_index(conn)
+    try:
+        chunks = []
+        for content, filename in tqdm(docs, desc="Chunking"):
+            chunks.extend(chunk_text(content, filename))
+        add_docs(conn, chunks)
+        index, ids, texts, bm25 = build_index(conn)
+    finally:
+        conn.close()
 
     if args.question:
-        print(answer(conn, index, ids, args.question))
+        print(answer(index, ids, texts, bm25, args.question))
     else:
-        print("\n=== RAG Interactive Mode ===")
-        print("Type 'exit' or 'quit' to exit\n")
+        print("\n=== RAG Interactive Mode (type 'quit' to exit) ===\n")
         while True:
-            question = input("Enter your question: ").strip()
+            try:
+                question = input("> Q: ").strip()
+            except (EOFError, KeyboardInterrupt):
+                print("\nBye.")
+                break
+            if not question:
+                continue
             if question.lower() in ("exit", "quit"):
                 print("Goodbye!")
                 break
-            if question:
-                response = answer(conn, index, ids, question)
-                print(f"\nAnswer: {response}\n")
+            print(f"\n> A: {answer(index, ids, texts, bm25, question)}\n")
+
+
+if __name__ == "__main__":
+    main()

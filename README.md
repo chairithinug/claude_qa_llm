@@ -119,12 +119,48 @@ Responses are structured JSON `{"Q": "...", "A": "..."}`. Conversation history i
 
 ## minimal_rag.py
 
-Prototype RAG with a local LLM (ollama). Same ingestion pipeline as `structured_QA_RAG.py` but answers via `qwen3.5:0.8b` instead of Claude.
+Fully local RAG — no Claude API required. Embeds with `nomic-embed-text` and answers with a small local model via ollama. Good for offline use or testing the pipeline without API cost.
+
+### Pipeline
+
+```
+Markdown files → chunk_text() → embed() → SQLite + IndexFlatL2 + BM25
+                                                        │
+                                              per query │
+                                                        ▼
+                                              hybrid retrieve (vector + BM25)
+                                                        │
+                                                        ▼
+                                              ollama.chat() → answer
+```
+
+### Setup
 
 ```bash
+ollama pull nomic-embed-text
+ollama pull qwen3:0.6b
+```
+
+### Usage
+
+```bash
+# Interactive mode
 python minimal_rag.py /path/to/docs
+
+# Single question
 python minimal_rag.py /path/to/docs -q "Your question"
 ```
+
+Delete `rag.db` before re-ingesting with different documents or chunk settings.
+
+### Key parameters
+
+| Parameter | Default | Effect |
+|---|---|---|
+| `size` | 150 | Max words per chunk |
+| `overlap` | 30 | Shared words between adjacent chunks |
+| `k` | 10 | Chunks passed to the LLM |
+| `alpha` | 0.7 | Semantic vs lexical weight in hybrid retrieval |
 
 ---
 
