@@ -1,0 +1,46 @@
+{
+  "/Users/mew.ac/Desktop/claude_qa_llm/structured_qa.py": {
+    "mtime": 1778148236.6948352,
+    "hash": "804d72a9eae6f713b3970784c64e7b6b"
+  },
+  "/Users/mew.ac/Desktop/claude_qa_llm/embedding.py": {
+    "mtime": 1777957292.1580143,
+    "hash": "aee9b279279bdfcf7b0f379dab8a97ab"
+  },
+  "/Users/mew.ac/Desktop/claude_qa_llm/async_qa_demo.py": {
+    "mtime": 1777965151.3110058,
+    "hash": "9bbcd995d4fd72939bbe6badc7e64c0b"
+  },
+  "/Users/mew.ac/Desktop/claude_qa_llm/structured_QA_RAG.py": {
+    "mtime": 1778146227.4999554,
+    "hash": "4a2f77a672bbde69a20c407e8bc99e1e"
+  },
+  "/Users/mew.ac/Desktop/claude_qa_llm/agentic_loop_demo.py": {
+    "mtime": 1777967071.6133523,
+    "hash": "35a87b7639f40a07dfff7686d6897785"
+  },
+  "/Users/mew.ac/Desktop/claude_qa_llm/minimal_rag.py": {
+    "mtime": 1778147476.6883485,
+    "hash": "80b1f497ef47ad7edbc7d4950a0e52fd"
+  },
+  "/Users/mew.ac/Desktop/claude_qa_llm/async_cached_demo.py": {
+    "mtime": 1777965499.2702503,
+    "hash": "bc91b0832d1aec9c9f0c5b345d88719f"
+  },
+  "/Users/mew.ac/Desktop/claude_qa_llm/agentic_loop_5iter_demo.py": {
+    "mtime": 1778038703.0370972,
+    "hash": "d58d02e2a09d7fe0342f001036c97c3b"
+  },
+  "/Users/mew.ac/Desktop/claude_qa_llm/qa.py": {
+    "mtime": 1777953392.395942,
+    "hash": "bb822cf29fe8d82cc26c4e76df34f226"
+  },
+  "/Users/mew.ac/Desktop/claude_qa_llm/requirements.txt": {
+    "mtime": 1778145161.5380013,
+    "hash": "371477011b5f42098f2d525b5072b748"
+  },
+  "/Users/mew.ac/Desktop/claude_qa_llm/README.md": {
+    "mtime": 1778148267.621988,
+    "hash": "65eda1cdd9468874e8c12e59b2507226"
+  }
+}

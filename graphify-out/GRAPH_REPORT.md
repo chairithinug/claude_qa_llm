@@ -1,102 +1,111 @@
 # Graph Report - .  (2026-05-07)
 
 ## Corpus Check
-- Corpus is ~6,311 words - fits in a single context window. You may not need a graph.
+- 11 files · ~6,500 words
+- Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 93 nodes · 145 edges · 11 communities detected
-- Extraction: 92% EXTRACTED · 8% INFERRED · 0% AMBIGUOUS · INFERRED: 11 edges (avg confidence: 0.87)
+- 106 nodes · 152 edges · 13 communities detected
+- Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 9 edges (avg confidence: 0.83)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
 - [[_COMMUNITY_RAG Retrieval Pipeline|RAG Retrieval Pipeline]]
+- [[_COMMUNITY_Dual Backend Config|Dual Backend Config]]
 - [[_COMMUNITY_Local RAG (ollama)|Local RAG (ollama)]]
-- [[_COMMUNITY_RAG Concepts & Models|RAG Concepts & Models]]
+- [[_COMMUNITY_Structured QA Backends|Structured QA Backends]]
 - [[_COMMUNITY_Agentic Loop (5-iter)|Agentic Loop (5-iter)]]
-- [[_COMMUNITY_Structured QA (Claude)|Structured QA (Claude)]]
 - [[_COMMUNITY_Agentic Loop Demo|Agentic Loop Demo]]
+- [[_COMMUNITY_minimal_rag Functions|minimal_rag Functions]]
+- [[_COMMUNITY_RAG Concepts & Models|RAG Concepts & Models]]
 - [[_COMMUNITY_Async Cached Q&A|Async Cached Q&A]]
-- [[_COMMUNITY_Streaming Q&A|Streaming Q&A]]
-- [[_COMMUNITY_Async & Cache Patterns|Async & Cache Patterns]]
 - [[_COMMUNITY_Async Q&A Demo|Async Q&A Demo]]
+- [[_COMMUNITY_Async & Cache Patterns|Async & Cache Patterns]]
 - [[_COMMUNITY_Agentic Loop Pattern|Agentic Loop Pattern]]
+- [[_COMMUNITY_Chunking Utility|Chunking Utility]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `main()` - 8 edges
-2. `main()` - 8 edges
-3. `execute_tool()` - 8 edges
-4. `answer()` - 7 edges
-5. `execute_tool()` - 6 edges
-6. `main()` - 5 edges
-7. `hybrid_retrieve()` - 4 edges
-8. `retrieve()` - 4 edges
-9. `main()` - 4 edges
-10. `Prompt Caching Pattern` - 4 edges
+2. `execute_tool()` - 8 edges
+3. `main()` - 8 edges
+4. `main()` - 8 edges
+5. `answer()` - 7 edges
+6. `call_with_backoff` - 7 edges
+7. `execute_tool()` - 6 edges
+8. `call_ollama` - 6 edges
+9. `main (structured_qa)` - 5 edges
+10. `hybrid_retrieve()` - 4 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `Cache Warmup Pattern` --conceptually_related_to--> `Prompt Caching Pattern`  [INFERRED]
-  async_cached_demo.py → structured_qa.py
+- `StructJSON` --references--> `README (claude_qa_llm)`  [EXTRACTED]
+  structured_qa.py → README.md
+- `call_with_backoff` --references--> `README (claude_qa_llm)`  [EXTRACTED]
+  structured_qa.py → README.md
+- `GEN_MODEL = qwen3.5:0.8b` --references--> `README (claude_qa_llm)`  [EXTRACTED]
+  minimal_rag.py → README.md
+- `StructJSON` --conceptually_related_to--> `GEN_MODEL = qwen3.5:0.8b`  [INFERRED]
+  structured_qa.py → minimal_rag.py
+- `call_ollama` --shares_data_with--> `GEN_MODEL = qwen3.5:0.8b`  [EXTRACTED]
+  structured_qa.py → minimal_rag.py
 
 ## Hyperedges (group relationships)
-- **Full RAG Pipeline** — structured_qa_rag, sqlite_vector_store, hybrid_retrieval_pattern, crossencoder_reranking, nomic_embed_text, structjson_model, prompt_caching_pattern [EXTRACTED 1.00]
-- **Local RAG Pipeline (no API)** — minimal_rag, sqlite_vector_store, hybrid_retrieval_pattern, nomic_embed_text [EXTRACTED 1.00]
-- **Async + Prompt Cache Combination** — async_cached_demo, concurrent_async_pattern, cache_warmup_pattern, prompt_caching_pattern [EXTRACTED 1.00]
-- **Agentic Loop Demos** — agentic_loop_demo, agentic_loop_5iter_demo, agentic_loop_pattern [EXTRACTED 1.00]
-- **Structured JSON Output Users** — structured_qa, structured_qa_rag, structjson_model [EXTRACTED 1.00]
+- **StructJSON shared contract across Claude and ollama backends** — structured_qa_structjson, structured_qa_call_with_backoff, structured_qa_call_ollama [EXTRACTED 1.00]
+- **minimal_rag ingestion and retrieval pipeline** — minimal_rag_chunk_text, minimal_rag_add_docs, minimal_rag_build_index, minimal_rag_retrieve, minimal_rag_answer [EXTRACTED 0.95]
+- **qwen3.5:0.8b used by both structured_qa --ollama and minimal_rag** — structured_qa_call_ollama, minimal_rag_answer, minimal_rag_gen_model [EXTRACTED 1.00]
 
-## Communities (12 total, 1 thin omitted)
+## Communities (14 total, 3 thin omitted)
 
 ### Community 0 - "RAG Retrieval Pipeline"
-Cohesion: 0.19
-Nodes (18): add_docs(), answer(), build_index(), call_with_backoff(), chunk_text(), embed(), hybrid_retrieve(), init_db() (+10 more)
+Cohesion: 0.17
+Nodes (19): add_docs(), answer(), build_index(), call_with_backoff(), chunk_text(), embed(), hybrid_retrieve(), init_db() (+11 more)
 
-### Community 1 - "Local RAG (ollama)"
+### Community 1 - "Dual Backend Config"
+Cohesion: 0.24
+Nodes (13): GEN_MODEL = qwen3.5:0.8b, README (claude_qa_llm), build_system_claude, build_system_ollama, cache_control ephemeral, call_ollama, call_with_backoff, exponential backoff with jitter (+5 more)
+
+### Community 2 - "Local RAG (ollama)"
 Cohesion: 0.33
 Nodes (11): add_docs(), answer(), build_index(), chunk_text(), embed(), init_db(), load_docs(), main() (+3 more)
 
-### Community 2 - "RAG Concepts & Models"
-Cohesion: 0.35
-Nodes (6): Cross-Encoder Reranking, Exponential Backoff with Jitter, Hybrid Retrieval Pattern (Vector + BM25), nomic-embed-text Embedding Model, SQLite + FAISS Vector Store, StructJSON Pydantic Model
+### Community 3 - "Structured QA Backends"
+Cohesion: 0.31
+Nodes (10): BaseModel, build_system_claude(), build_system_ollama(), call_ollama(), call_with_backoff(), load_document(), main(), parse_args() (+2 more)
 
-### Community 3 - "Agentic Loop (5-iter)"
+### Community 4 - "Agentic Loop (5-iter)"
 Cohesion: 0.33
 Nodes (9): calculate_average(), compare_cities(), execute_tool(), Execute a tool and return the result., Run the agentic loop until done or max iterations., run_agent(), search_elevation(), search_population() (+1 more)
-
-### Community 4 - "Structured QA (Claude)"
-Cohesion: 0.33
-Nodes (8): BaseModel, build_system(), call_with_backoff(), load_document(), main(), print_cache_stats(), StructJSON, StructJSON
 
 ### Community 5 - "Agentic Loop Demo"
 Cohesion: 0.39
 Nodes (7): calculate(), execute_tool(), Run the agentic loop until the agent says it's done or max iterations., Execute a tool and return the result., read_file(), run_agent(), search()
 
-### Community 6 - "Async Cached Q&A"
+### Community 6 - "minimal_rag Functions"
+Cohesion: 0.32
+Nodes (8): add_docs, answer (minimal_rag), build_index, embed, EMBED_MODEL = nomic-embed-text, hybrid retrieval (FAISS + BM25), main (minimal_rag), retrieve
+
+### Community 7 - "RAG Concepts & Models"
+Cohesion: 0.47
+Nodes (4): Cross-Encoder Reranking, Hybrid Retrieval Pattern (Vector + BM25), nomic-embed-text Embedding Model, SQLite + FAISS Vector Store
+
+### Community 8 - "Async Cached Q&A"
 Cohesion: 0.7
 Nodes (4): ask(), build_system(), main(), print_usage()
-
-### Community 7 - "Streaming Q&A"
-Cohesion: 0.7
-Nodes (4): build_system(), load_document(), main(), print_cache_stats()
-
-### Community 8 - "Async & Cache Patterns"
-Cohesion: 0.6
-Nodes (3): Cache Warmup Pattern, Concurrent Async Pattern with asyncio.gather, Prompt Caching Pattern
 
 ### Community 9 - "Async Q&A Demo"
 Cohesion: 0.67
 Nodes (3): ask(), main(), Send one question and return (question, answer).
 
 ## Knowledge Gaps
-- **9 isolated node(s):** `Send one question and return (question, answer).`, `Load all markdown files from a root directory recursively.     Returns list of t`, `Chunk markdown by heading → paragraph boundaries.      Each chunk is prefixed wi`, `Score each (query, chunk) pair jointly and return top_n by score.      Cross-enc`, `Retrieve context via hybrid search and answer using Claude with structured outpu` (+4 more)
+- **20 isolated node(s):** `Send one question and return (question, answer).`, `StructJSON`, `Load all markdown files from a root directory recursively.     Returns list of t`, `Chunk markdown by heading → paragraph boundaries.      Each chunk is prefixed wi`, `Score each (query, chunk) pair jointly and return top_n by score.      Cross-enc` (+15 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **1 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **3 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `StructJSON` connect `Structured QA (Claude)` to `RAG Retrieval Pipeline`?**
-  _High betweenness centrality (0.036) - this node is a cross-community bridge._
-- **Why does `Prompt Caching Pattern` connect `Async & Cache Patterns` to `RAG Concepts & Models`?**
-  _High betweenness centrality (0.011) - this node is a cross-community bridge._
-- **What connects `Send one question and return (question, answer).`, `Load all markdown files from a root directory recursively.     Returns list of t`, `Chunk markdown by heading → paragraph boundaries.      Each chunk is prefixed wi` to the rest of the system?**
-  _9 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Why does `GEN_MODEL = qwen3.5:0.8b` connect `Dual Backend Config` to `minimal_rag Functions`?**
+  _High betweenness centrality (0.018) - this node is a cross-community bridge._
+- **Why does `answer (minimal_rag)` connect `minimal_rag Functions` to `Dual Backend Config`?**
+  _High betweenness centrality (0.017) - this node is a cross-community bridge._
+- **What connects `Send one question and return (question, answer).`, `StructJSON`, `Load all markdown files from a root directory recursively.     Returns list of t` to the rest of the system?**
+  _20 weakly-connected nodes found - possible documentation gaps or missing edges._
