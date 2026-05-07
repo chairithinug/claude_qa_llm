@@ -1,0 +1,2570 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {
+    "hyperedges": [
+      {
+        "id": "rag_pipeline",
+        "label": "Full RAG Pipeline",
+        "nodes": [
+          "structured_qa_rag",
+          "sqlite_vector_store",
+          "hybrid_retrieval_pattern",
+          "crossencoder_reranking",
+          "nomic_embed_text",
+          "structjson_model",
+          "prompt_caching_pattern"
+        ],
+        "relation": "implement",
+        "confidence": "EXTRACTED",
+        "confidence_score": 1.0,
+        "source_file": "structured_QA_RAG.py"
+      },
+      {
+        "id": "local_rag_pipeline",
+        "label": "Local RAG Pipeline (no API)",
+        "nodes": [
+          "minimal_rag",
+          "sqlite_vector_store",
+          "hybrid_retrieval_pattern",
+          "nomic_embed_text"
+        ],
+        "relation": "implement",
+        "confidence": "EXTRACTED",
+        "confidence_score": 1.0,
+        "source_file": "minimal_rag.py"
+      },
+      {
+        "id": "async_cache_combo",
+        "label": "Async + Prompt Cache Combination",
+        "nodes": [
+          "async_cached_demo",
+          "concurrent_async_pattern",
+          "cache_warmup_pattern",
+          "prompt_caching_pattern"
+        ],
+        "relation": "implement",
+        "confidence": "EXTRACTED",
+        "confidence_score": 1.0,
+        "source_file": "async_cached_demo.py"
+      },
+      {
+        "id": "agentic_loop_family",
+        "label": "Agentic Loop Demos",
+        "nodes": [
+          "agentic_loop_demo",
+          "agentic_loop_5iter_demo",
+          "agentic_loop_pattern"
+        ],
+        "relation": "implement",
+        "confidence": "EXTRACTED",
+        "confidence_score": 1.0,
+        "source_file": "agentic_loop_demo.py"
+      },
+      {
+        "id": "structured_output_group",
+        "label": "Structured JSON Output Users",
+        "nodes": [
+          "structured_qa",
+          "structured_qa_rag",
+          "structjson_model"
+        ],
+        "relation": "implement",
+        "confidence": "EXTRACTED",
+        "confidence_score": 1.0,
+        "source_file": "structured_qa.py"
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "label": "structured_qa.py",
+      "file_type": "code",
+      "source_file": "structured_qa.py",
+      "source_location": "L1",
+      "id": "structured_qa_py",
+      "community": 4,
+      "norm_label": "structured_qa.py"
+    },
+    {
+      "label": "StructJSON",
+      "file_type": "code",
+      "source_file": "structured_qa.py",
+      "source_location": "L20",
+      "id": "claude_qa_llm_structured_qa_structjson",
+      "community": 4,
+      "norm_label": "structjson"
+    },
+    {
+      "label": "BaseModel",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "id": "basemodel",
+      "community": 4,
+      "norm_label": "basemodel"
+    },
+    {
+      "label": "load_document()",
+      "file_type": "code",
+      "source_file": "structured_qa.py",
+      "source_location": "L24",
+      "id": "claude_qa_llm_structured_qa_load_document",
+      "community": 4,
+      "norm_label": "load_document()"
+    },
+    {
+      "label": "build_system()",
+      "file_type": "code",
+      "source_file": "structured_qa.py",
+      "source_location": "L42",
+      "id": "claude_qa_llm_structured_qa_build_system",
+      "community": 4,
+      "norm_label": "build_system()"
+    },
+    {
+      "label": "print_cache_stats()",
+      "file_type": "code",
+      "source_file": "structured_qa.py",
+      "source_location": "L61",
+      "id": "claude_qa_llm_structured_qa_print_cache_stats",
+      "community": 4,
+      "norm_label": "print_cache_stats()"
+    },
+    {
+      "label": "call_with_backoff()",
+      "file_type": "code",
+      "source_file": "structured_qa.py",
+      "source_location": "L76",
+      "id": "claude_qa_llm_structured_qa_call_with_backoff",
+      "community": 4,
+      "norm_label": "call_with_backoff()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "structured_qa.py",
+      "source_location": "L103",
+      "id": "claude_qa_llm_structured_qa_main",
+      "community": 4,
+      "norm_label": "main()"
+    },
+    {
+      "label": "embedding.py",
+      "file_type": "code",
+      "source_file": "embedding.py",
+      "source_location": "L1",
+      "id": "embedding_py",
+      "community": 11,
+      "norm_label": "embedding.py"
+    },
+    {
+      "label": "async_qa_demo.py",
+      "file_type": "code",
+      "source_file": "async_qa_demo.py",
+      "source_location": "L1",
+      "id": "async_qa_demo_py",
+      "community": 9,
+      "norm_label": "async_qa_demo.py"
+    },
+    {
+      "label": "ask()",
+      "file_type": "code",
+      "source_file": "async_qa_demo.py",
+      "source_location": "L29",
+      "id": "claude_qa_llm_async_qa_demo_ask",
+      "community": 9,
+      "norm_label": "ask()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "async_qa_demo.py",
+      "source_location": "L40",
+      "id": "claude_qa_llm_async_qa_demo_main",
+      "community": 9,
+      "norm_label": "main()"
+    },
+    {
+      "label": "Send one question and return (question, answer).",
+      "file_type": "rationale",
+      "source_file": "async_qa_demo.py",
+      "source_location": "L30",
+      "id": "claude_qa_llm_async_qa_demo_rationale_30",
+      "community": 9,
+      "norm_label": "send one question and return (question, answer)."
+    },
+    {
+      "label": "structured_QA_RAG.py",
+      "file_type": "code",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L1",
+      "id": "structured_qa_rag_py",
+      "community": 0,
+      "norm_label": "structured_qa_rag.py"
+    },
+    {
+      "label": "StructJSON",
+      "file_type": "code",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L31",
+      "id": "claude_qa_llm_structured_qa_rag_structjson",
+      "community": 4,
+      "norm_label": "structjson"
+    },
+    {
+      "label": "load_docs_from_directory()",
+      "file_type": "code",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L36",
+      "id": "claude_qa_llm_structured_qa_rag_load_docs_from_directory",
+      "community": 0,
+      "norm_label": "load_docs_from_directory()"
+    },
+    {
+      "label": "parse_args()",
+      "file_type": "code",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L64",
+      "id": "claude_qa_llm_structured_qa_rag_parse_args",
+      "community": 0,
+      "norm_label": "parse_args()"
+    },
+    {
+      "label": "init_db()",
+      "file_type": "code",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L106",
+      "id": "claude_qa_llm_structured_qa_rag_init_db",
+      "community": 0,
+      "norm_label": "init_db()"
+    },
+    {
+      "label": "chunk_text()",
+      "file_type": "code",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L128",
+      "id": "claude_qa_llm_structured_qa_rag_chunk_text",
+      "community": 0,
+      "norm_label": "chunk_text()"
+    },
+    {
+      "label": "embed()",
+      "file_type": "code",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L181",
+      "id": "claude_qa_llm_structured_qa_rag_embed",
+      "community": 0,
+      "norm_label": "embed()"
+    },
+    {
+      "label": "add_docs()",
+      "file_type": "code",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L190",
+      "id": "claude_qa_llm_structured_qa_rag_add_docs",
+      "community": 0,
+      "norm_label": "add_docs()"
+    },
+    {
+      "label": "build_index()",
+      "file_type": "code",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L203",
+      "id": "claude_qa_llm_structured_qa_rag_build_index",
+      "community": 0,
+      "norm_label": "build_index()"
+    },
+    {
+      "label": "_normalize()",
+      "file_type": "code",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L232",
+      "id": "claude_qa_llm_structured_qa_rag_normalize",
+      "community": 0,
+      "norm_label": "_normalize()"
+    },
+    {
+      "label": "hybrid_retrieve()",
+      "file_type": "code",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L240",
+      "id": "claude_qa_llm_structured_qa_rag_hybrid_retrieve",
+      "community": 0,
+      "norm_label": "hybrid_retrieve()"
+    },
+    {
+      "label": "print_cache_stats()",
+      "file_type": "code",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L267",
+      "id": "claude_qa_llm_structured_qa_rag_print_cache_stats",
+      "community": 0,
+      "norm_label": "print_cache_stats()"
+    },
+    {
+      "label": "call_with_backoff()",
+      "file_type": "code",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L283",
+      "id": "claude_qa_llm_structured_qa_rag_call_with_backoff",
+      "community": 0,
+      "norm_label": "call_with_backoff()"
+    },
+    {
+      "label": "rerank()",
+      "file_type": "code",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L322",
+      "id": "claude_qa_llm_structured_qa_rag_rerank",
+      "community": 0,
+      "norm_label": "rerank()"
+    },
+    {
+      "label": "answer()",
+      "file_type": "code",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L335",
+      "id": "claude_qa_llm_structured_qa_rag_answer",
+      "community": 0,
+      "norm_label": "answer()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L395",
+      "id": "claude_qa_llm_structured_qa_rag_main",
+      "community": 0,
+      "norm_label": "main()"
+    },
+    {
+      "label": "Load all markdown files from a root directory recursively.     Returns list of t",
+      "file_type": "rationale",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L37",
+      "id": "claude_qa_llm_structured_qa_rag_rationale_37",
+      "community": 0,
+      "norm_label": "load all markdown files from a root directory recursively.     returns list of t"
+    },
+    {
+      "label": "Chunk markdown by heading \u2192 paragraph boundaries.      Each chunk is prefixed wi",
+      "file_type": "rationale",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L129",
+      "id": "claude_qa_llm_structured_qa_rag_rationale_129",
+      "community": 0,
+      "norm_label": "chunk markdown by heading \u2192 paragraph boundaries.      each chunk is prefixed wi"
+    },
+    {
+      "label": "Score each (query, chunk) pair jointly and return top_n by score.      Cross-enc",
+      "file_type": "rationale",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L323",
+      "id": "claude_qa_llm_structured_qa_rag_rationale_323",
+      "community": 0,
+      "norm_label": "score each (query, chunk) pair jointly and return top_n by score.      cross-enc"
+    },
+    {
+      "label": "Retrieve context via hybrid search and answer using Claude with structured outpu",
+      "file_type": "rationale",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L336",
+      "id": "claude_qa_llm_structured_qa_rag_rationale_336",
+      "community": 0,
+      "norm_label": "retrieve context via hybrid search and answer using claude with structured outpu"
+    },
+    {
+      "label": "agentic_loop_demo.py",
+      "file_type": "code",
+      "source_file": "agentic_loop_demo.py",
+      "source_location": "L1",
+      "id": "agentic_loop_demo_py",
+      "community": 5,
+      "norm_label": "agentic_loop_demo.py"
+    },
+    {
+      "label": "search()",
+      "file_type": "code",
+      "source_file": "agentic_loop_demo.py",
+      "source_location": "L64",
+      "id": "claude_qa_llm_agentic_loop_demo_search",
+      "community": 5,
+      "norm_label": "search()"
+    },
+    {
+      "label": "calculate()",
+      "file_type": "code",
+      "source_file": "agentic_loop_demo.py",
+      "source_location": "L72",
+      "id": "claude_qa_llm_agentic_loop_demo_calculate",
+      "community": 5,
+      "norm_label": "calculate()"
+    },
+    {
+      "label": "read_file()",
+      "file_type": "code",
+      "source_file": "agentic_loop_demo.py",
+      "source_location": "L79",
+      "id": "claude_qa_llm_agentic_loop_demo_read_file",
+      "community": 5,
+      "norm_label": "read_file()"
+    },
+    {
+      "label": "execute_tool()",
+      "file_type": "code",
+      "source_file": "agentic_loop_demo.py",
+      "source_location": "L86",
+      "id": "claude_qa_llm_agentic_loop_demo_execute_tool",
+      "community": 5,
+      "norm_label": "execute_tool()"
+    },
+    {
+      "label": "run_agent()",
+      "file_type": "code",
+      "source_file": "agentic_loop_demo.py",
+      "source_location": "L101",
+      "id": "claude_qa_llm_agentic_loop_demo_run_agent",
+      "community": 5,
+      "norm_label": "run_agent()"
+    },
+    {
+      "label": "Execute a tool and return the result.",
+      "file_type": "rationale",
+      "source_file": "agentic_loop_demo.py",
+      "source_location": "L87",
+      "id": "claude_qa_llm_agentic_loop_demo_rationale_87",
+      "community": 5,
+      "norm_label": "execute a tool and return the result."
+    },
+    {
+      "label": "Run the agentic loop until the agent says it's done or max iterations.",
+      "file_type": "rationale",
+      "source_file": "agentic_loop_demo.py",
+      "source_location": "L102",
+      "id": "claude_qa_llm_agentic_loop_demo_rationale_102",
+      "community": 5,
+      "norm_label": "run the agentic loop until the agent says it's done or max iterations."
+    },
+    {
+      "label": "minimal_rag.py",
+      "file_type": "code",
+      "source_file": "minimal_rag.py",
+      "source_location": "L1",
+      "id": "minimal_rag_py",
+      "community": 1,
+      "norm_label": "minimal_rag.py"
+    },
+    {
+      "label": "parse_args()",
+      "file_type": "code",
+      "source_file": "minimal_rag.py",
+      "source_location": "L16",
+      "id": "claude_qa_llm_minimal_rag_parse_args",
+      "community": 1,
+      "norm_label": "parse_args()"
+    },
+    {
+      "label": "load_docs()",
+      "file_type": "code",
+      "source_file": "minimal_rag.py",
+      "source_location": "L31",
+      "id": "claude_qa_llm_minimal_rag_load_docs",
+      "community": 1,
+      "norm_label": "load_docs()"
+    },
+    {
+      "label": "chunk_text()",
+      "file_type": "code",
+      "source_file": "minimal_rag.py",
+      "source_location": "L48",
+      "id": "claude_qa_llm_minimal_rag_chunk_text",
+      "community": 1,
+      "norm_label": "chunk_text()"
+    },
+    {
+      "label": "embed()",
+      "file_type": "code",
+      "source_file": "minimal_rag.py",
+      "source_location": "L57",
+      "id": "claude_qa_llm_minimal_rag_embed",
+      "community": 1,
+      "norm_label": "embed()"
+    },
+    {
+      "label": "init_db()",
+      "file_type": "code",
+      "source_file": "minimal_rag.py",
+      "source_location": "L61",
+      "id": "claude_qa_llm_minimal_rag_init_db",
+      "community": 1,
+      "norm_label": "init_db()"
+    },
+    {
+      "label": "add_docs()",
+      "file_type": "code",
+      "source_file": "minimal_rag.py",
+      "source_location": "L81",
+      "id": "claude_qa_llm_minimal_rag_add_docs",
+      "community": 1,
+      "norm_label": "add_docs()"
+    },
+    {
+      "label": "build_index()",
+      "file_type": "code",
+      "source_file": "minimal_rag.py",
+      "source_location": "L94",
+      "id": "claude_qa_llm_minimal_rag_build_index",
+      "community": 1,
+      "norm_label": "build_index()"
+    },
+    {
+      "label": "_normalize()",
+      "file_type": "code",
+      "source_file": "minimal_rag.py",
+      "source_location": "L118",
+      "id": "claude_qa_llm_minimal_rag_normalize",
+      "community": 1,
+      "norm_label": "_normalize()"
+    },
+    {
+      "label": "retrieve()",
+      "file_type": "code",
+      "source_file": "minimal_rag.py",
+      "source_location": "L123",
+      "id": "claude_qa_llm_minimal_rag_retrieve",
+      "community": 1,
+      "norm_label": "retrieve()"
+    },
+    {
+      "label": "answer()",
+      "file_type": "code",
+      "source_file": "minimal_rag.py",
+      "source_location": "L140",
+      "id": "claude_qa_llm_minimal_rag_answer",
+      "community": 1,
+      "norm_label": "answer()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "minimal_rag.py",
+      "source_location": "L149",
+      "id": "claude_qa_llm_minimal_rag_main",
+      "community": 1,
+      "norm_label": "main()"
+    },
+    {
+      "label": "async_cached_demo.py",
+      "file_type": "code",
+      "source_file": "async_cached_demo.py",
+      "source_location": "L1",
+      "id": "async_cached_demo_py",
+      "community": 6,
+      "norm_label": "async_cached_demo.py"
+    },
+    {
+      "label": "build_system()",
+      "file_type": "code",
+      "source_file": "async_cached_demo.py",
+      "source_location": "L42",
+      "id": "claude_qa_llm_async_cached_demo_build_system",
+      "community": 6,
+      "norm_label": "build_system()"
+    },
+    {
+      "label": "print_usage()",
+      "file_type": "code",
+      "source_file": "async_cached_demo.py",
+      "source_location": "L55",
+      "id": "claude_qa_llm_async_cached_demo_print_usage",
+      "community": 6,
+      "norm_label": "print_usage()"
+    },
+    {
+      "label": "ask()",
+      "file_type": "code",
+      "source_file": "async_cached_demo.py",
+      "source_location": "L62",
+      "id": "claude_qa_llm_async_cached_demo_ask",
+      "community": 6,
+      "norm_label": "ask()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "async_cached_demo.py",
+      "source_location": "L79",
+      "id": "claude_qa_llm_async_cached_demo_main",
+      "community": 6,
+      "norm_label": "main()"
+    },
+    {
+      "label": "agentic_loop_5iter_demo.py",
+      "file_type": "code",
+      "source_file": "agentic_loop_5iter_demo.py",
+      "source_location": "L1",
+      "id": "agentic_loop_5iter_demo_py",
+      "community": 3,
+      "norm_label": "agentic_loop_5iter_demo.py"
+    },
+    {
+      "label": "search_weather()",
+      "file_type": "code",
+      "source_file": "agentic_loop_5iter_demo.py",
+      "source_location": "L106",
+      "id": "claude_qa_llm_agentic_loop_5iter_demo_search_weather",
+      "community": 3,
+      "norm_label": "search_weather()"
+    },
+    {
+      "label": "search_population()",
+      "file_type": "code",
+      "source_file": "agentic_loop_5iter_demo.py",
+      "source_location": "L109",
+      "id": "claude_qa_llm_agentic_loop_5iter_demo_search_population",
+      "community": 3,
+      "norm_label": "search_population()"
+    },
+    {
+      "label": "search_elevation()",
+      "file_type": "code",
+      "source_file": "agentic_loop_5iter_demo.py",
+      "source_location": "L115",
+      "id": "claude_qa_llm_agentic_loop_5iter_demo_search_elevation",
+      "community": 3,
+      "norm_label": "search_elevation()"
+    },
+    {
+      "label": "calculate_average()",
+      "file_type": "code",
+      "source_file": "agentic_loop_5iter_demo.py",
+      "source_location": "L121",
+      "id": "claude_qa_llm_agentic_loop_5iter_demo_calculate_average",
+      "community": 3,
+      "norm_label": "calculate_average()"
+    },
+    {
+      "label": "compare_cities()",
+      "file_type": "code",
+      "source_file": "agentic_loop_5iter_demo.py",
+      "source_location": "L127",
+      "id": "claude_qa_llm_agentic_loop_5iter_demo_compare_cities",
+      "community": 3,
+      "norm_label": "compare_cities()"
+    },
+    {
+      "label": "execute_tool()",
+      "file_type": "code",
+      "source_file": "agentic_loop_5iter_demo.py",
+      "source_location": "L130",
+      "id": "claude_qa_llm_agentic_loop_5iter_demo_execute_tool",
+      "community": 3,
+      "norm_label": "execute_tool()"
+    },
+    {
+      "label": "run_agent()",
+      "file_type": "code",
+      "source_file": "agentic_loop_5iter_demo.py",
+      "source_location": "L151",
+      "id": "claude_qa_llm_agentic_loop_5iter_demo_run_agent",
+      "community": 3,
+      "norm_label": "run_agent()"
+    },
+    {
+      "label": "Execute a tool and return the result.",
+      "file_type": "rationale",
+      "source_file": "agentic_loop_5iter_demo.py",
+      "source_location": "L131",
+      "id": "claude_qa_llm_agentic_loop_5iter_demo_rationale_131",
+      "community": 3,
+      "norm_label": "execute a tool and return the result."
+    },
+    {
+      "label": "Run the agentic loop until done or max iterations.",
+      "file_type": "rationale",
+      "source_file": "agentic_loop_5iter_demo.py",
+      "source_location": "L152",
+      "id": "claude_qa_llm_agentic_loop_5iter_demo_rationale_152",
+      "community": 3,
+      "norm_label": "run the agentic loop until done or max iterations."
+    },
+    {
+      "label": "qa.py",
+      "file_type": "code",
+      "source_file": "qa.py",
+      "source_location": "L1",
+      "id": "qa_py",
+      "community": 7,
+      "norm_label": "qa.py"
+    },
+    {
+      "label": "load_document()",
+      "file_type": "code",
+      "source_file": "qa.py",
+      "source_location": "L15",
+      "id": "claude_qa_llm_qa_load_document",
+      "community": 7,
+      "norm_label": "load_document()"
+    },
+    {
+      "label": "build_system()",
+      "file_type": "code",
+      "source_file": "qa.py",
+      "source_location": "L33",
+      "id": "claude_qa_llm_qa_build_system",
+      "community": 7,
+      "norm_label": "build_system()"
+    },
+    {
+      "label": "print_cache_stats()",
+      "file_type": "code",
+      "source_file": "qa.py",
+      "source_location": "L51",
+      "id": "claude_qa_llm_qa_print_cache_stats",
+      "community": 7,
+      "norm_label": "print_cache_stats()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "qa.py",
+      "source_location": "L64",
+      "id": "claude_qa_llm_qa_main",
+      "community": 7,
+      "norm_label": "main()"
+    },
+    {
+      "label": "structured_qa.py",
+      "file_type": "code",
+      "source_file": "structured_qa.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "structured_qa",
+      "community": 2,
+      "norm_label": "structured_qa.py"
+    },
+    {
+      "label": "embedding.py",
+      "file_type": "code",
+      "source_file": "embedding.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "embedding",
+      "community": 2,
+      "norm_label": "embedding.py"
+    },
+    {
+      "label": "async_qa_demo.py",
+      "file_type": "code",
+      "source_file": "async_qa_demo.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "async_qa_demo",
+      "community": 8,
+      "norm_label": "async_qa_demo.py"
+    },
+    {
+      "label": "structured_QA_RAG.py",
+      "file_type": "code",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "structured_qa_rag",
+      "community": 2,
+      "norm_label": "structured_qa_rag.py"
+    },
+    {
+      "label": "agentic_loop_demo.py",
+      "file_type": "code",
+      "source_file": "agentic_loop_demo.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "agentic_loop_demo",
+      "community": 10,
+      "norm_label": "agentic_loop_demo.py"
+    },
+    {
+      "label": "minimal_rag.py",
+      "file_type": "code",
+      "source_file": "minimal_rag.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "minimal_rag",
+      "community": 2,
+      "norm_label": "minimal_rag.py"
+    },
+    {
+      "label": "async_cached_demo.py",
+      "file_type": "code",
+      "source_file": "async_cached_demo.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "async_cached_demo",
+      "community": 8,
+      "norm_label": "async_cached_demo.py"
+    },
+    {
+      "label": "agentic_loop_5iter_demo.py",
+      "file_type": "code",
+      "source_file": "agentic_loop_5iter_demo.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "agentic_loop_5iter_demo",
+      "community": 10,
+      "norm_label": "agentic_loop_5iter_demo.py"
+    },
+    {
+      "label": "qa.py",
+      "file_type": "code",
+      "source_file": "qa.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "qa",
+      "community": 2,
+      "norm_label": "qa.py"
+    },
+    {
+      "label": "README.md",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "readme",
+      "community": 2,
+      "norm_label": "readme.md"
+    },
+    {
+      "label": "StructJSON Pydantic Model",
+      "file_type": "rationale",
+      "source_file": "structured_qa.py",
+      "source_location": "line 20",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "structjson_model",
+      "community": 2,
+      "norm_label": "structjson pydantic model"
+    },
+    {
+      "label": "Prompt Caching Pattern",
+      "file_type": "rationale",
+      "source_file": "structured_qa.py",
+      "source_location": "line 42",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "prompt_caching_pattern",
+      "community": 8,
+      "norm_label": "prompt caching pattern"
+    },
+    {
+      "label": "Hybrid Retrieval Pattern (Vector + BM25)",
+      "file_type": "rationale",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "line 240",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "hybrid_retrieval_pattern",
+      "community": 2,
+      "norm_label": "hybrid retrieval pattern (vector + bm25)"
+    },
+    {
+      "label": "Cross-Encoder Reranking",
+      "file_type": "rationale",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "line 322",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "crossencoder_reranking",
+      "community": 2,
+      "norm_label": "cross-encoder reranking"
+    },
+    {
+      "label": "Agentic Loop Pattern",
+      "file_type": "rationale",
+      "source_file": "agentic_loop_demo.py",
+      "source_location": "line 101",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "agentic_loop_pattern",
+      "community": 10,
+      "norm_label": "agentic loop pattern"
+    },
+    {
+      "label": "Exponential Backoff with Jitter",
+      "file_type": "rationale",
+      "source_file": "structured_qa.py",
+      "source_location": "line 76",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "exponential_backoff",
+      "community": 2,
+      "norm_label": "exponential backoff with jitter"
+    },
+    {
+      "label": "SQLite + FAISS Vector Store",
+      "file_type": "rationale",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "line 106",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "sqlite_vector_store",
+      "community": 2,
+      "norm_label": "sqlite + faiss vector store"
+    },
+    {
+      "label": "nomic-embed-text Embedding Model",
+      "file_type": "rationale",
+      "source_file": "embedding.py",
+      "source_location": "line 13",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "nomic_embed_text",
+      "community": 2,
+      "norm_label": "nomic-embed-text embedding model"
+    },
+    {
+      "label": "Concurrent Async Pattern with asyncio.gather",
+      "file_type": "rationale",
+      "source_file": "async_qa_demo.py",
+      "source_location": "line 54",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "concurrent_async_pattern",
+      "community": 8,
+      "norm_label": "concurrent async pattern with asyncio.gather"
+    },
+    {
+      "label": "Cache Warmup Pattern",
+      "file_type": "rationale",
+      "source_file": "async_cached_demo.py",
+      "source_location": "line 83",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "cache_warmup_pattern",
+      "community": 8,
+      "norm_label": "cache warmup pattern"
+    }
+  ],
+  "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_qa.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "structured_qa_py",
+      "target": "claude_qa_llm_structured_qa_structjson",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_qa.py",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "structured_qa_py",
+      "target": "claude_qa_llm_structured_qa_load_document",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_qa.py",
+      "source_location": "L42",
+      "weight": 1.0,
+      "source": "structured_qa_py",
+      "target": "claude_qa_llm_structured_qa_build_system",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_qa.py",
+      "source_location": "L61",
+      "weight": 1.0,
+      "source": "structured_qa_py",
+      "target": "claude_qa_llm_structured_qa_print_cache_stats",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_qa.py",
+      "source_location": "L76",
+      "weight": 1.0,
+      "source": "structured_qa_py",
+      "target": "claude_qa_llm_structured_qa_call_with_backoff",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_qa.py",
+      "source_location": "L103",
+      "weight": 1.0,
+      "source": "structured_qa_py",
+      "target": "claude_qa_llm_structured_qa_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_qa.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "claude_qa_llm_structured_qa_structjson",
+      "target": "basemodel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "claude_qa_llm_structured_qa_rag_structjson",
+      "target": "basemodel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_qa.py",
+      "source_location": "L108",
+      "weight": 1.0,
+      "source": "claude_qa_llm_structured_qa_main",
+      "target": "claude_qa_llm_structured_qa_load_document",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_qa.py",
+      "source_location": "L109",
+      "weight": 1.0,
+      "source": "claude_qa_llm_structured_qa_main",
+      "target": "claude_qa_llm_structured_qa_build_system",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_qa.py",
+      "source_location": "L168",
+      "weight": 1.0,
+      "source": "claude_qa_llm_structured_qa_main",
+      "target": "claude_qa_llm_structured_qa_print_cache_stats",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_qa.py",
+      "source_location": "L132",
+      "weight": 1.0,
+      "source": "claude_qa_llm_structured_qa_main",
+      "target": "claude_qa_llm_structured_qa_call_with_backoff",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "async_qa_demo.py",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "async_qa_demo_py",
+      "target": "claude_qa_llm_async_qa_demo_ask",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "async_qa_demo.py",
+      "source_location": "L40",
+      "weight": 1.0,
+      "source": "async_qa_demo_py",
+      "target": "claude_qa_llm_async_qa_demo_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "async_qa_demo.py",
+      "source_location": "L47",
+      "weight": 1.0,
+      "source": "claude_qa_llm_async_qa_demo_main",
+      "target": "claude_qa_llm_async_qa_demo_ask",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "async_qa_demo.py",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "claude_qa_llm_async_qa_demo_rationale_30",
+      "target": "claude_qa_llm_async_qa_demo_ask",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "structured_qa_rag_py",
+      "target": "claude_qa_llm_structured_qa_rag_structjson",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L36",
+      "weight": 1.0,
+      "source": "structured_qa_rag_py",
+      "target": "claude_qa_llm_structured_qa_rag_load_docs_from_directory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L64",
+      "weight": 1.0,
+      "source": "structured_qa_rag_py",
+      "target": "claude_qa_llm_structured_qa_rag_parse_args",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L106",
+      "weight": 1.0,
+      "source": "structured_qa_rag_py",
+      "target": "claude_qa_llm_structured_qa_rag_init_db",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L128",
+      "weight": 1.0,
+      "source": "structured_qa_rag_py",
+      "target": "claude_qa_llm_structured_qa_rag_chunk_text",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L181",
+      "weight": 1.0,
+      "source": "structured_qa_rag_py",
+      "target": "claude_qa_llm_structured_qa_rag_embed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L190",
+      "weight": 1.0,
+      "source": "structured_qa_rag_py",
+      "target": "claude_qa_llm_structured_qa_rag_add_docs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L203",
+      "weight": 1.0,
+      "source": "structured_qa_rag_py",
+      "target": "claude_qa_llm_structured_qa_rag_build_index",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L232",
+      "weight": 1.0,
+      "source": "structured_qa_rag_py",
+      "target": "claude_qa_llm_structured_qa_rag_normalize",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L240",
+      "weight": 1.0,
+      "source": "structured_qa_rag_py",
+      "target": "claude_qa_llm_structured_qa_rag_hybrid_retrieve",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L267",
+      "weight": 1.0,
+      "source": "structured_qa_rag_py",
+      "target": "claude_qa_llm_structured_qa_rag_print_cache_stats",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L283",
+      "weight": 1.0,
+      "source": "structured_qa_rag_py",
+      "target": "claude_qa_llm_structured_qa_rag_call_with_backoff",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L322",
+      "weight": 1.0,
+      "source": "structured_qa_rag_py",
+      "target": "claude_qa_llm_structured_qa_rag_rerank",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L335",
+      "weight": 1.0,
+      "source": "structured_qa_rag_py",
+      "target": "claude_qa_llm_structured_qa_rag_answer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L395",
+      "weight": 1.0,
+      "source": "structured_qa_rag_py",
+      "target": "claude_qa_llm_structured_qa_rag_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L397",
+      "weight": 1.0,
+      "source": "claude_qa_llm_structured_qa_rag_main",
+      "target": "claude_qa_llm_structured_qa_rag_load_docs_from_directory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "claude_qa_llm_structured_qa_rag_rationale_37",
+      "target": "claude_qa_llm_structured_qa_rag_load_docs_from_directory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L396",
+      "weight": 1.0,
+      "source": "claude_qa_llm_structured_qa_rag_main",
+      "target": "claude_qa_llm_structured_qa_rag_parse_args",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L399",
+      "weight": 1.0,
+      "source": "claude_qa_llm_structured_qa_rag_main",
+      "target": "claude_qa_llm_structured_qa_rag_init_db",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L403",
+      "weight": 1.0,
+      "source": "claude_qa_llm_structured_qa_rag_main",
+      "target": "claude_qa_llm_structured_qa_rag_chunk_text",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L129",
+      "weight": 1.0,
+      "source": "claude_qa_llm_structured_qa_rag_rationale_129",
+      "target": "claude_qa_llm_structured_qa_rag_chunk_text",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L193",
+      "weight": 1.0,
+      "source": "claude_qa_llm_structured_qa_rag_add_docs",
+      "target": "claude_qa_llm_structured_qa_rag_embed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L245",
+      "weight": 1.0,
+      "source": "claude_qa_llm_structured_qa_rag_hybrid_retrieve",
+      "target": "claude_qa_llm_structured_qa_rag_embed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L405",
+      "weight": 1.0,
+      "source": "claude_qa_llm_structured_qa_rag_main",
+      "target": "claude_qa_llm_structured_qa_rag_add_docs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L407",
+      "weight": 1.0,
+      "source": "claude_qa_llm_structured_qa_rag_main",
+      "target": "claude_qa_llm_structured_qa_rag_build_index",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L250",
+      "weight": 1.0,
+      "source": "claude_qa_llm_structured_qa_rag_hybrid_retrieve",
+      "target": "claude_qa_llm_structured_qa_rag_normalize",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L341",
+      "weight": 1.0,
+      "source": "claude_qa_llm_structured_qa_rag_answer",
+      "target": "claude_qa_llm_structured_qa_rag_hybrid_retrieve",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L382",
+      "weight": 1.0,
+      "source": "claude_qa_llm_structured_qa_rag_answer",
+      "target": "claude_qa_llm_structured_qa_rag_print_cache_stats",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L356",
+      "weight": 1.0,
+      "source": "claude_qa_llm_structured_qa_rag_answer",
+      "target": "claude_qa_llm_structured_qa_rag_call_with_backoff",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L342",
+      "weight": 1.0,
+      "source": "claude_qa_llm_structured_qa_rag_answer",
+      "target": "claude_qa_llm_structured_qa_rag_rerank",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L323",
+      "weight": 1.0,
+      "source": "claude_qa_llm_structured_qa_rag_rationale_323",
+      "target": "claude_qa_llm_structured_qa_rag_rerank",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L419",
+      "weight": 1.0,
+      "source": "claude_qa_llm_structured_qa_rag_main",
+      "target": "claude_qa_llm_structured_qa_rag_answer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "L336",
+      "weight": 1.0,
+      "source": "claude_qa_llm_structured_qa_rag_rationale_336",
+      "target": "claude_qa_llm_structured_qa_rag_answer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "agentic_loop_demo.py",
+      "source_location": "L64",
+      "weight": 1.0,
+      "source": "agentic_loop_demo_py",
+      "target": "claude_qa_llm_agentic_loop_demo_search",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "agentic_loop_demo.py",
+      "source_location": "L72",
+      "weight": 1.0,
+      "source": "agentic_loop_demo_py",
+      "target": "claude_qa_llm_agentic_loop_demo_calculate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "agentic_loop_demo.py",
+      "source_location": "L79",
+      "weight": 1.0,
+      "source": "agentic_loop_demo_py",
+      "target": "claude_qa_llm_agentic_loop_demo_read_file",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "agentic_loop_demo.py",
+      "source_location": "L86",
+      "weight": 1.0,
+      "source": "agentic_loop_demo_py",
+      "target": "claude_qa_llm_agentic_loop_demo_execute_tool",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "agentic_loop_demo.py",
+      "source_location": "L101",
+      "weight": 1.0,
+      "source": "agentic_loop_demo_py",
+      "target": "claude_qa_llm_agentic_loop_demo_run_agent",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "agentic_loop_demo.py",
+      "source_location": "L89",
+      "weight": 1.0,
+      "source": "claude_qa_llm_agentic_loop_demo_execute_tool",
+      "target": "claude_qa_llm_agentic_loop_demo_search",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "agentic_loop_demo.py",
+      "source_location": "L91",
+      "weight": 1.0,
+      "source": "claude_qa_llm_agentic_loop_demo_execute_tool",
+      "target": "claude_qa_llm_agentic_loop_demo_calculate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "agentic_loop_demo.py",
+      "source_location": "L93",
+      "weight": 1.0,
+      "source": "claude_qa_llm_agentic_loop_demo_execute_tool",
+      "target": "claude_qa_llm_agentic_loop_demo_read_file",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "agentic_loop_demo.py",
+      "source_location": "L154",
+      "weight": 1.0,
+      "source": "claude_qa_llm_agentic_loop_demo_run_agent",
+      "target": "claude_qa_llm_agentic_loop_demo_execute_tool",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "agentic_loop_demo.py",
+      "source_location": "L87",
+      "weight": 1.0,
+      "source": "claude_qa_llm_agentic_loop_demo_rationale_87",
+      "target": "claude_qa_llm_agentic_loop_demo_execute_tool",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "agentic_loop_demo.py",
+      "source_location": "L102",
+      "weight": 1.0,
+      "source": "claude_qa_llm_agentic_loop_demo_rationale_102",
+      "target": "claude_qa_llm_agentic_loop_demo_run_agent",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "minimal_rag.py",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "minimal_rag_py",
+      "target": "claude_qa_llm_minimal_rag_parse_args",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "minimal_rag.py",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "minimal_rag_py",
+      "target": "claude_qa_llm_minimal_rag_load_docs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "minimal_rag.py",
+      "source_location": "L48",
+      "weight": 1.0,
+      "source": "minimal_rag_py",
+      "target": "claude_qa_llm_minimal_rag_chunk_text",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "minimal_rag.py",
+      "source_location": "L57",
+      "weight": 1.0,
+      "source": "minimal_rag_py",
+      "target": "claude_qa_llm_minimal_rag_embed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "minimal_rag.py",
+      "source_location": "L61",
+      "weight": 1.0,
+      "source": "minimal_rag_py",
+      "target": "claude_qa_llm_minimal_rag_init_db",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "minimal_rag.py",
+      "source_location": "L81",
+      "weight": 1.0,
+      "source": "minimal_rag_py",
+      "target": "claude_qa_llm_minimal_rag_add_docs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "minimal_rag.py",
+      "source_location": "L94",
+      "weight": 1.0,
+      "source": "minimal_rag_py",
+      "target": "claude_qa_llm_minimal_rag_build_index",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "minimal_rag.py",
+      "source_location": "L118",
+      "weight": 1.0,
+      "source": "minimal_rag_py",
+      "target": "claude_qa_llm_minimal_rag_normalize",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "minimal_rag.py",
+      "source_location": "L123",
+      "weight": 1.0,
+      "source": "minimal_rag_py",
+      "target": "claude_qa_llm_minimal_rag_retrieve",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "minimal_rag.py",
+      "source_location": "L140",
+      "weight": 1.0,
+      "source": "minimal_rag_py",
+      "target": "claude_qa_llm_minimal_rag_answer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "minimal_rag.py",
+      "source_location": "L149",
+      "weight": 1.0,
+      "source": "minimal_rag_py",
+      "target": "claude_qa_llm_minimal_rag_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "minimal_rag.py",
+      "source_location": "L150",
+      "weight": 1.0,
+      "source": "claude_qa_llm_minimal_rag_main",
+      "target": "claude_qa_llm_minimal_rag_parse_args",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "minimal_rag.py",
+      "source_location": "L151",
+      "weight": 1.0,
+      "source": "claude_qa_llm_minimal_rag_main",
+      "target": "claude_qa_llm_minimal_rag_load_docs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "minimal_rag.py",
+      "source_location": "L157",
+      "weight": 1.0,
+      "source": "claude_qa_llm_minimal_rag_main",
+      "target": "claude_qa_llm_minimal_rag_chunk_text",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "minimal_rag.py",
+      "source_location": "L84",
+      "weight": 1.0,
+      "source": "claude_qa_llm_minimal_rag_add_docs",
+      "target": "claude_qa_llm_minimal_rag_embed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "minimal_rag.py",
+      "source_location": "L126",
+      "weight": 1.0,
+      "source": "claude_qa_llm_minimal_rag_retrieve",
+      "target": "claude_qa_llm_minimal_rag_embed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "minimal_rag.py",
+      "source_location": "L153",
+      "weight": 1.0,
+      "source": "claude_qa_llm_minimal_rag_main",
+      "target": "claude_qa_llm_minimal_rag_init_db",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "minimal_rag.py",
+      "source_location": "L158",
+      "weight": 1.0,
+      "source": "claude_qa_llm_minimal_rag_main",
+      "target": "claude_qa_llm_minimal_rag_add_docs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "minimal_rag.py",
+      "source_location": "L159",
+      "weight": 1.0,
+      "source": "claude_qa_llm_minimal_rag_main",
+      "target": "claude_qa_llm_minimal_rag_build_index",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "minimal_rag.py",
+      "source_location": "L130",
+      "weight": 1.0,
+      "source": "claude_qa_llm_minimal_rag_retrieve",
+      "target": "claude_qa_llm_minimal_rag_normalize",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "minimal_rag.py",
+      "source_location": "L141",
+      "weight": 1.0,
+      "source": "claude_qa_llm_minimal_rag_answer",
+      "target": "claude_qa_llm_minimal_rag_retrieve",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "minimal_rag.py",
+      "source_location": "L164",
+      "weight": 1.0,
+      "source": "claude_qa_llm_minimal_rag_main",
+      "target": "claude_qa_llm_minimal_rag_answer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "async_cached_demo.py",
+      "source_location": "L42",
+      "weight": 1.0,
+      "source": "async_cached_demo_py",
+      "target": "claude_qa_llm_async_cached_demo_build_system",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "async_cached_demo.py",
+      "source_location": "L55",
+      "weight": 1.0,
+      "source": "async_cached_demo_py",
+      "target": "claude_qa_llm_async_cached_demo_print_usage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "async_cached_demo.py",
+      "source_location": "L62",
+      "weight": 1.0,
+      "source": "async_cached_demo_py",
+      "target": "claude_qa_llm_async_cached_demo_ask",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "async_cached_demo.py",
+      "source_location": "L79",
+      "weight": 1.0,
+      "source": "async_cached_demo_py",
+      "target": "claude_qa_llm_async_cached_demo_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "async_cached_demo.py",
+      "source_location": "L81",
+      "weight": 1.0,
+      "source": "claude_qa_llm_async_cached_demo_main",
+      "target": "claude_qa_llm_async_cached_demo_build_system",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "async_cached_demo.py",
+      "source_location": "L75",
+      "weight": 1.0,
+      "source": "claude_qa_llm_async_cached_demo_ask",
+      "target": "claude_qa_llm_async_cached_demo_print_usage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "async_cached_demo.py",
+      "source_location": "L88",
+      "weight": 1.0,
+      "source": "claude_qa_llm_async_cached_demo_main",
+      "target": "claude_qa_llm_async_cached_demo_ask",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "agentic_loop_5iter_demo.py",
+      "source_location": "L106",
+      "weight": 1.0,
+      "source": "agentic_loop_5iter_demo_py",
+      "target": "claude_qa_llm_agentic_loop_5iter_demo_search_weather",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "agentic_loop_5iter_demo.py",
+      "source_location": "L109",
+      "weight": 1.0,
+      "source": "agentic_loop_5iter_demo_py",
+      "target": "claude_qa_llm_agentic_loop_5iter_demo_search_population",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "agentic_loop_5iter_demo.py",
+      "source_location": "L115",
+      "weight": 1.0,
+      "source": "agentic_loop_5iter_demo_py",
+      "target": "claude_qa_llm_agentic_loop_5iter_demo_search_elevation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "agentic_loop_5iter_demo.py",
+      "source_location": "L121",
+      "weight": 1.0,
+      "source": "agentic_loop_5iter_demo_py",
+      "target": "claude_qa_llm_agentic_loop_5iter_demo_calculate_average",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "agentic_loop_5iter_demo.py",
+      "source_location": "L127",
+      "weight": 1.0,
+      "source": "agentic_loop_5iter_demo_py",
+      "target": "claude_qa_llm_agentic_loop_5iter_demo_compare_cities",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "agentic_loop_5iter_demo.py",
+      "source_location": "L130",
+      "weight": 1.0,
+      "source": "agentic_loop_5iter_demo_py",
+      "target": "claude_qa_llm_agentic_loop_5iter_demo_execute_tool",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "agentic_loop_5iter_demo.py",
+      "source_location": "L151",
+      "weight": 1.0,
+      "source": "agentic_loop_5iter_demo_py",
+      "target": "claude_qa_llm_agentic_loop_5iter_demo_run_agent",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "agentic_loop_5iter_demo.py",
+      "source_location": "L133",
+      "weight": 1.0,
+      "source": "claude_qa_llm_agentic_loop_5iter_demo_execute_tool",
+      "target": "claude_qa_llm_agentic_loop_5iter_demo_search_weather",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "agentic_loop_5iter_demo.py",
+      "source_location": "L135",
+      "weight": 1.0,
+      "source": "claude_qa_llm_agentic_loop_5iter_demo_execute_tool",
+      "target": "claude_qa_llm_agentic_loop_5iter_demo_search_population",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "agentic_loop_5iter_demo.py",
+      "source_location": "L137",
+      "weight": 1.0,
+      "source": "claude_qa_llm_agentic_loop_5iter_demo_execute_tool",
+      "target": "claude_qa_llm_agentic_loop_5iter_demo_search_elevation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "agentic_loop_5iter_demo.py",
+      "source_location": "L139",
+      "weight": 1.0,
+      "source": "claude_qa_llm_agentic_loop_5iter_demo_execute_tool",
+      "target": "claude_qa_llm_agentic_loop_5iter_demo_calculate_average",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "agentic_loop_5iter_demo.py",
+      "source_location": "L141",
+      "weight": 1.0,
+      "source": "claude_qa_llm_agentic_loop_5iter_demo_execute_tool",
+      "target": "claude_qa_llm_agentic_loop_5iter_demo_compare_cities",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "agentic_loop_5iter_demo.py",
+      "source_location": "L211",
+      "weight": 1.0,
+      "source": "claude_qa_llm_agentic_loop_5iter_demo_run_agent",
+      "target": "claude_qa_llm_agentic_loop_5iter_demo_execute_tool",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "agentic_loop_5iter_demo.py",
+      "source_location": "L131",
+      "weight": 1.0,
+      "source": "claude_qa_llm_agentic_loop_5iter_demo_rationale_131",
+      "target": "claude_qa_llm_agentic_loop_5iter_demo_execute_tool",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "agentic_loop_5iter_demo.py",
+      "source_location": "L152",
+      "weight": 1.0,
+      "source": "claude_qa_llm_agentic_loop_5iter_demo_rationale_152",
+      "target": "claude_qa_llm_agentic_loop_5iter_demo_run_agent",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "qa.py",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "qa_py",
+      "target": "claude_qa_llm_qa_load_document",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "qa.py",
+      "source_location": "L33",
+      "weight": 1.0,
+      "source": "qa_py",
+      "target": "claude_qa_llm_qa_build_system",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "qa.py",
+      "source_location": "L51",
+      "weight": 1.0,
+      "source": "qa_py",
+      "target": "claude_qa_llm_qa_print_cache_stats",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "qa.py",
+      "source_location": "L64",
+      "weight": 1.0,
+      "source": "qa_py",
+      "target": "claude_qa_llm_qa_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "qa.py",
+      "source_location": "L69",
+      "weight": 1.0,
+      "source": "claude_qa_llm_qa_main",
+      "target": "claude_qa_llm_qa_load_document",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "qa.py",
+      "source_location": "L70",
+      "weight": 1.0,
+      "source": "claude_qa_llm_qa_main",
+      "target": "claude_qa_llm_qa_build_system",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "qa.py",
+      "source_location": "L115",
+      "weight": 1.0,
+      "source": "claude_qa_llm_qa_main",
+      "target": "claude_qa_llm_qa_print_cache_stats",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "structured_qa.py",
+      "source_location": null,
+      "weight": 0.95,
+      "source": "structured_qa",
+      "target": "structjson_model"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "structured_qa.py",
+      "source_location": "line 42",
+      "weight": 1.0,
+      "source": "structured_qa",
+      "target": "prompt_caching_pattern"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "structured_qa.py",
+      "source_location": "line 76",
+      "weight": 1.0,
+      "source": "structured_qa",
+      "target": "exponential_backoff"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 0.85,
+      "source": "structured_qa",
+      "target": "structured_qa_rag"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 0.85,
+      "relation_note": "structured_qa adds structured JSON output and retry logic on top of qa's streaming approach",
+      "source": "structured_qa",
+      "target": "qa"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "line 121",
+      "weight": 1.0,
+      "source": "readme",
+      "target": "structured_qa"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "embedding.py",
+      "source_location": "line 13",
+      "weight": 1.0,
+      "source": "embedding",
+      "target": "nomic_embed_text"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "structured_QA_RAG.py",
+      "source_location": null,
+      "weight": 0.75,
+      "source": "structured_qa_rag",
+      "target": "embedding"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "minimal_rag.py",
+      "source_location": null,
+      "weight": 0.75,
+      "source": "minimal_rag",
+      "target": "embedding"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "line 9",
+      "weight": 1.0,
+      "source": "readme",
+      "target": "embedding"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "async_qa_demo.py",
+      "source_location": "line 54",
+      "weight": 1.0,
+      "source": "async_qa_demo",
+      "target": "concurrent_async_pattern"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "async_qa_demo.py",
+      "source_location": null,
+      "weight": 0.85,
+      "source": "async_qa_demo",
+      "target": "async_cached_demo"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "structured_QA_RAG.py",
+      "source_location": null,
+      "weight": 0.95,
+      "source": "structured_qa_rag",
+      "target": "structjson_model"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "line 240",
+      "weight": 1.0,
+      "source": "structured_qa_rag",
+      "target": "hybrid_retrieval_pattern"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "line 322",
+      "weight": 1.0,
+      "source": "structured_qa_rag",
+      "target": "crossencoder_reranking"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "line 106",
+      "weight": 1.0,
+      "source": "structured_qa_rag",
+      "target": "sqlite_vector_store"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "line 308",
+      "weight": 1.0,
+      "source": "structured_qa_rag",
+      "target": "prompt_caching_pattern"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "line 283",
+      "weight": 1.0,
+      "source": "structured_qa_rag",
+      "target": "exponential_backoff"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "structured_QA_RAG.py",
+      "source_location": "line 27",
+      "weight": 1.0,
+      "source": "structured_qa_rag",
+      "target": "nomic_embed_text"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 0.85,
+      "source": "structured_qa_rag",
+      "target": "minimal_rag"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "line 19",
+      "weight": 1.0,
+      "source": "readme",
+      "target": "structured_qa_rag"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "agentic_loop_demo.py",
+      "source_location": "line 101",
+      "weight": 1.0,
+      "source": "agentic_loop_demo",
+      "target": "agentic_loop_pattern"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "agentic_loop_5iter_demo.py",
+      "source_location": null,
+      "weight": 0.95,
+      "source": "agentic_loop_demo",
+      "target": "agentic_loop_5iter_demo"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "minimal_rag.py",
+      "source_location": "line 61",
+      "weight": 1.0,
+      "source": "minimal_rag",
+      "target": "sqlite_vector_store"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "minimal_rag.py",
+      "source_location": "line 123",
+      "weight": 1.0,
+      "source": "minimal_rag",
+      "target": "hybrid_retrieval_pattern"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "minimal_rag.py",
+      "source_location": "line 11",
+      "weight": 1.0,
+      "source": "minimal_rag",
+      "target": "nomic_embed_text"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "line 132",
+      "weight": 1.0,
+      "source": "readme",
+      "target": "minimal_rag"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "async_cached_demo.py",
+      "source_location": "line 83",
+      "weight": 1.0,
+      "source": "async_cached_demo",
+      "target": "cache_warmup_pattern"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "async_cached_demo.py",
+      "source_location": "line 42",
+      "weight": 1.0,
+      "source": "async_cached_demo",
+      "target": "prompt_caching_pattern"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "async_cached_demo.py",
+      "source_location": "line 96",
+      "weight": 1.0,
+      "source": "async_cached_demo",
+      "target": "concurrent_async_pattern"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "agentic_loop_5iter_demo.py",
+      "source_location": "line 151",
+      "weight": 1.0,
+      "source": "agentic_loop_5iter_demo",
+      "target": "agentic_loop_pattern"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "line 9",
+      "weight": 1.0,
+      "source": "readme",
+      "target": "qa"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "async_cached_demo.py",
+      "source_location": null,
+      "weight": 0.95,
+      "source": "cache_warmup_pattern",
+      "target": "prompt_caching_pattern"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "structured_QA_RAG.py",
+      "source_location": null,
+      "weight": 0.85,
+      "source": "crossencoder_reranking",
+      "target": "hybrid_retrieval_pattern"
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "rag_pipeline",
+      "label": "Full RAG Pipeline",
+      "nodes": [
+        "structured_qa_rag",
+        "sqlite_vector_store",
+        "hybrid_retrieval_pattern",
+        "crossencoder_reranking",
+        "nomic_embed_text",
+        "structjson_model",
+        "prompt_caching_pattern"
+      ],
+      "relation": "implement",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "structured_QA_RAG.py"
+    },
+    {
+      "id": "local_rag_pipeline",
+      "label": "Local RAG Pipeline (no API)",
+      "nodes": [
+        "minimal_rag",
+        "sqlite_vector_store",
+        "hybrid_retrieval_pattern",
+        "nomic_embed_text"
+      ],
+      "relation": "implement",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "minimal_rag.py"
+    },
+    {
+      "id": "async_cache_combo",
+      "label": "Async + Prompt Cache Combination",
+      "nodes": [
+        "async_cached_demo",
+        "concurrent_async_pattern",
+        "cache_warmup_pattern",
+        "prompt_caching_pattern"
+      ],
+      "relation": "implement",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "async_cached_demo.py"
+    },
+    {
+      "id": "agentic_loop_family",
+      "label": "Agentic Loop Demos",
+      "nodes": [
+        "agentic_loop_demo",
+        "agentic_loop_5iter_demo",
+        "agentic_loop_pattern"
+      ],
+      "relation": "implement",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "agentic_loop_demo.py"
+    },
+    {
+      "id": "structured_output_group",
+      "label": "Structured JSON Output Users",
+      "nodes": [
+        "structured_qa",
+        "structured_qa_rag",
+        "structjson_model"
+      ],
+      "relation": "implement",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "structured_qa.py"
+    }
+  ]
+}

@@ -177,6 +177,28 @@ Delete `rag.db` before re-ingesting with different documents or chunk settings.
 
 ---
 
+## Knowledge Graph
+
+Generated with [graphify](https://github.com/safishamsi/graphify). 93 nodes · 145 edges · 12 communities.
+
+![Knowledge graph of the codebase](graphify-out/graph.svg)
+
+| Community | Files / Concepts |
+|---|---|
+| RAG Retrieval Pipeline | `structured_QA_RAG.py` — retrieval functions |
+| Local RAG (ollama) | `minimal_rag.py` — local inference path |
+| RAG Concepts & Models | Cross-encoder reranking, hybrid retrieval, nomic-embed-text |
+| Structured QA (Claude) | `structured_qa.py` — single-doc Q&A |
+| Async & Cache Patterns | `async_cached_demo.py`, prompt caching, cache warmup |
+| Async Q&A Demo | `async_qa_demo.py` — concurrent questions |
+| Streaming Q&A | `qa.py` — streaming single-doc Q&A |
+| Agentic Loop Pattern | `agentic_loop_demo.py`, `agentic_loop_5iter_demo.py` |
+| Embedding Utility | `embedding.py` |
+
+**Key insight:** `StructJSON` (the Pydantic output model) is the shared contract between `structured_qa.py` and `structured_QA_RAG.py`. Both tools converge on the same `call_with_backoff()` → `StructJSON.model_validate_json()` → `parsed.A` path despite completely different retrieval machinery — making their conversation histories structurally interoperable.
+
+---
+
 ## Stack
 
 | Package | Role |
